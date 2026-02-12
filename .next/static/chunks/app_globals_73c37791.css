@@ -278,6 +278,83 @@
     display: none !important;
   }
 
+  @keyframes float {
+    0%, 100% {
+      transform: translateY(0);
+    }
+
+    50% {
+      transform: translateY(-10px);
+    }
+  }
+
+  .animate-float {
+    animation: 6s ease-in-out infinite float;
+  }
+
+  .animate-float-slow {
+    animation: 9s ease-in-out infinite float;
+  }
+
+  .dark {
+    --background: 0 0% 3.9%;
+    --foreground: 0 0% 98%;
+    --card: 0 0% 3.9%;
+    --card-foreground: 0 0% 98%;
+    --popover: 0 0% 3.9%;
+    --popover-foreground: 0 0% 98%;
+    --primary: 0 0% 98%;
+    --primary-foreground: 0 0% 9%;
+    --secondary: 0 0% 14.9%;
+    --secondary-foreground: 0 0% 98%;
+    --muted: 0 0% 14.9%;
+    --muted-foreground: 0 0% 63.9%;
+    --accent: 0 0% 14.9%;
+    --accent-foreground: 0 0% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 0 0% 14.9%;
+    --input: 0 0% 14.9%;
+    --ring: 0 0% 83.1%;
+    --chart-1: 220 70% 50%;
+    --chart-2: 160 60% 45%;
+    --chart-3: 30 80% 55%;
+    --chart-4: 280 65% 60%;
+    --chart-5: 340 75% 55%;
+    --sidebar-background: 240 5.9% 10%;
+    --sidebar-foreground: 240 4.8% 95.9%;
+    --sidebar-primary: 224.3 76.3% 48%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 240 3.7% 15.9%;
+    --sidebar-accent-foreground: 240 4.8% 95.9%;
+    --sidebar-border: 240 3.7% 15.9%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+    --app-gradient: radial-gradient(1100px 560px at -10% -20%, #745af647, transparent 60%), radial-gradient(980px 560px at 112% 0%, #4aaff738, transparent 58%), linear-gradient(160deg, #151828 0%, #141824 52%, #11151c 100%);
+    --app-surface-tint: #735af214;
+  }
+
+  .light[class*="theme-nitro-"] {
+    --background: 0 0% 100%;
+    --foreground: 225 22% 12%;
+    --card: 0 0% 100%;
+    --card-foreground: 225 22% 12%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 225 22% 12%;
+    --secondary: 220 28% 94%;
+    --secondary-foreground: 225 18% 16%;
+    --muted: 220 28% 95%;
+    --muted-foreground: 224 14% 40%;
+    --border: 220 24% 88%;
+    --input: 220 24% 88%;
+    --sidebar-background: 0 0% 99%;
+    --sidebar-foreground: 225 18% 16%;
+    --sidebar-accent: 220 28% 95%;
+    --sidebar-accent-foreground: 225 18% 16%;
+    --sidebar-border: 220 24% 88%;
+    --app-gradient: radial-gradient(1100px 580px at -10% -15%, hsl(var(--primary) / .27), transparent 58%), radial-gradient(980px 560px at 112% 0%, hsl(var(--accent) / .22), transparent 58%), linear-gradient(165deg, #fff 0%, #f5f7fa 52%, #eaeef5 100%);
+    --app-surface-tint: hsl(var(--primary) / .05);
+  }
+
   *, :after, :before, ::backdrop, ::file-selector-button {
     border-color: var(--color-gray-200, currentcolor);
   }
@@ -575,156 +652,138 @@
     --primary: 350 82% 62%;
     --accent: 8 82% 61%;
     --ring: 350 82% 62%;
-    --app-gradient: radial-gradient(1040px 560px at -12% -18%, #ef3e5557, transparent 58%), radial-gradient(900px 520px at 112% 4%, #ee553a38, transparent 58%), linear-gradient(160deg, #261215 0%, #28151b 50%, #20131a 100%);
+    --app-gradient: radial-gradient(1060px 560px at -10% -22%, #f33f574d, transparent 58%), radial-gradient(920px 520px at 112% 2%, #ec5f3c38, transparent 58%), linear-gradient(160deg, #241417 0%, #231518 52%, #1c1215 100%);
     --app-surface-tint: #ee4f691a;
   }
 
   .theme-nitro-midnight-blurple {
-    --background: 234 34% 11%;
-    --card: 234 29% 13%;
-    --popover: 234 29% 13%;
-    --sidebar-background: 234 29% 12%;
-    --primary: 247 90% 67%;
-    --accent: 214 92% 66%;
-    --ring: 247 90% 67%;
-    --app-gradient: radial-gradient(1100px 560px at -8% -20%, #7a66f94d, transparent 60%), radial-gradient(980px 560px at 112% 0%, #4fa3f83d, transparent 58%), linear-gradient(160deg, #141629 0%, #141724 52%, #11151d 100%);
-    --app-surface-tint: #715ff717;
+    --background: 235 26% 11%;
+    --card: 235 22% 12%;
+    --popover: 235 22% 12%;
+    --sidebar-background: 235 22% 11%;
+    --primary: 241 92% 70%;
+    --accent: 210 92% 65%;
+    --ring: 241 92% 70%;
+    --app-gradient: radial-gradient(1050px 560px at -10% -20%, #6859f84d, transparent 60%), radial-gradient(920px 520px at 112% 2%, #4abbf738, transparent 58%), linear-gradient(160deg, #161827 0%, #171926 50%, #14161f 100%);
+    --app-surface-tint: #6e6cf91a;
   }
 
   .theme-nitro-mars {
-    --background: 14 33% 11%;
-    --card: 14 28% 13%;
-    --popover: 14 28% 13%;
-    --sidebar-background: 14 28% 12%;
-    --primary: 15 74% 58%;
-    --accent: 29 64% 56%;
-    --ring: 15 74% 58%;
-    --app-gradient: radial-gradient(1040px 560px at -12% -20%, #df583a4f, transparent 58%), radial-gradient(940px 520px at 112% 4%, #d5853433, transparent 58%), linear-gradient(160deg, #291914 0%, #2b1d17 50%, #1f1814 100%);
-    --app-surface-tint: #e36c4517;
+    --background: 12 30% 10%;
+    --card: 12 25% 12%;
+    --popover: 12 25% 12%;
+    --sidebar-background: 12 26% 11%;
+    --primary: 14 74% 61%;
+    --accent: 22 78% 62%;
+    --ring: 14 74% 61%;
+    --app-gradient: radial-gradient(1040px 560px at -10% -20%, #ea71534d, transparent 60%), radial-gradient(920px 520px at 112% 2%, #e9844938, transparent 58%), linear-gradient(160deg, #241714 0%, #231815 52%, #1c1312 100%);
+    --app-surface-tint: #e574521a;
   }
 
   .theme-nitro-dusk {
-    --background: 259 27% 11%;
-    --card: 259 23% 13%;
-    --popover: 259 23% 13%;
-    --sidebar-background: 259 23% 12%;
-    --primary: 266 58% 66%;
-    --accent: 223 42% 65%;
-    --ring: 266 58% 66%;
-    --app-gradient: radial-gradient(1060px 560px at -8% -20%, #a56adc4d, transparent 58%), radial-gradient(940px 520px at 112% 4%, #788bc938, transparent 58%), linear-gradient(160deg, #1c1528 0%, #1c1929 50%, #14151f 100%);
-    --app-surface-tint: #a276db17;
+    --background: 256 23% 11%;
+    --card: 256 20% 13%;
+    --popover: 256 20% 13%;
+    --sidebar-background: 256 21% 12%;
+    --primary: 263 53% 67%;
+    --accent: 299 44% 64%;
+    --ring: 263 53% 67%;
+    --app-gradient: radial-gradient(1020px 560px at -10% -20%, #8f64d847, transparent 58%), radial-gradient(920px 520px at 112% 2%, #c768ca33, transparent 58%), linear-gradient(160deg, #1b1727 0%, #1b1826 50%, #17141f 100%);
+    --app-surface-tint: #a07ed717;
   }
 
   .theme-nitro-under-the-sea {
-    --background: 197 35% 10%;
-    --card: 197 30% 12%;
-    --popover: 197 30% 12%;
-    --sidebar-background: 197 30% 11%;
-    --primary: 189 70% 58%;
-    --accent: 168 58% 54%;
-    --ring: 189 70% 58%;
-    --app-gradient: radial-gradient(1100px 560px at -8% -20%, #35a7e94d, transparent 60%), radial-gradient(940px 520px at 114% 2%, #3acbae3d, transparent 58%), linear-gradient(160deg, #121f26 0%, #152428 50%, #131f20 100%);
-    --app-surface-tint: #49c8df17;
+    --background: 205 33% 10%;
+    --card: 205 28% 12%;
+    --popover: 205 28% 12%;
+    --sidebar-background: 205 28% 11%;
+    --primary: 186 70% 58%;
+    --accent: 197 74% 55%;
+    --ring: 186 70% 58%;
+    --app-gradient: radial-gradient(1040px 560px at -10% -20%, #44d4e44d, transparent 58%), radial-gradient(920px 520px at 112% 2%, #35b2e338, transparent 58%), linear-gradient(160deg, #141e24 0%, #151d23 50%, #12181c 100%);
+    --app-surface-tint: #49d0df1a;
   }
 
   .theme-nitro-retro-storm {
-    --background: 214 21% 11%;
-    --card: 214 18% 13%;
-    --popover: 214 18% 13%;
-    --sidebar-background: 214 18% 12%;
-    --primary: 213 30% 65%;
-    --accent: 201 25% 63%;
-    --ring: 213 30% 65%;
-    --app-gradient: radial-gradient(1060px 560px at -8% -20%, #819cbb47, transparent 58%), radial-gradient(920px 520px at 112% 2%, #81a3b12e, transparent 58%), linear-gradient(160deg, #171e26 0%, #1b2128 52%, #151a1e 100%);
-    --app-surface-tint: #8ba3c114;
+    --background: 216 20% 11%;
+    --card: 216 18% 13%;
+    --popover: 216 18% 13%;
+    --sidebar-background: 216 18% 12%;
+    --primary: 213 33% 66%;
+    --accent: 214 26% 62%;
+    --ring: 213 33% 66%;
+    --app-gradient: radial-gradient(1040px 560px at -10% -20%, #83a0c342, transparent 58%), radial-gradient(920px 520px at 112% 2%, #849bb833, transparent 58%), linear-gradient(160deg, #151b23 0%, #161b22 50%, #13161b 100%);
+    --app-surface-tint: #8ca5c514;
   }
 
   .theme-nitro-neon-nights {
-    --background: 245 36% 10%;
-    --card: 245 31% 12%;
-    --popover: 245 31% 12%;
-    --sidebar-background: 245 31% 11%;
-    --primary: 287 100% 67%;
-    --accent: 191 100% 60%;
-    --ring: 287 100% 67%;
-    --app-gradient: radial-gradient(1040px 560px at -12% -20%, #db4cff52, transparent 58%), radial-gradient(900px 520px at 112% 2%, #29d4ff47, transparent 58%), linear-gradient(160deg, #121127 0%, #191528 50%, #11141d 100%);
-    --app-surface-tint: #db57ff1a;
+    --background: 233 43% 8%;
+    --card: 233 38% 10%;
+    --popover: 233 38% 10%;
+    --sidebar-background: 233 38% 9%;
+    --primary: 292 96% 66%;
+    --accent: 190 94% 56%;
+    --ring: 292 96% 66%;
+    --app-gradient: radial-gradient(1040px 560px at -10% -20%, #bc45f747, transparent 58%), radial-gradient(920px 520px at 112% 2%, #25d2f83d, transparent 58%), linear-gradient(160deg, #101223 0%, #10121e 50%, #0f111a 100%);
+    --app-surface-tint: #e555fc1a;
   }
 
   .theme-nitro-strawberry-lemonade {
-    --background: 339 30% 11%;
-    --card: 339 25% 13%;
-    --popover: 339 25% 13%;
-    --sidebar-background: 339 25% 12%;
-    --primary: 341 84% 64%;
-    --accent: 48 93% 63%;
-    --ring: 341 84% 64%;
-    --app-gradient: radial-gradient(1040px 560px at -10% -20%, #f44e8b4f, transparent 58%), radial-gradient(940px 520px at 112% 6%, #fad73d3d, transparent 58%), linear-gradient(160deg, #29151c 0%, #27161e 50%, #1f1814 100%);
-    --app-surface-tint: #f0568717;
+    --background: 334 31% 10%;
+    --card: 334 27% 12%;
+    --popover: 334 27% 12%;
+    --sidebar-background: 334 27% 11%;
+    --primary: 342 83% 67%;
+    --accent: 46 89% 63%;
+    --ring: 342 83% 67%;
+    --app-gradient: radial-gradient(1040px 560px at -10% -20%, #f254844d, transparent 58%), radial-gradient(920px 520px at 112% 2%, #f5cd473d, transparent 58%), linear-gradient(160deg, #24141b 0%, #23151b 50%, #1c1217 100%);
+    --app-surface-tint: #f1658f1a;
   }
 
   .theme-nitro-aurora {
-    --background: 175 30% 11%;
-    --card: 175 26% 13%;
-    --popover: 175 26% 13%;
-    --sidebar-background: 175 26% 12%;
-    --primary: 168 67% 58%;
-    --accent: 123 56% 63%;
-    --ring: 168 67% 58%;
-    --app-gradient: radial-gradient(1100px 560px at -8% -20%, #3ee0da4d, transparent 60%), radial-gradient(960px 540px at 114% 2%, #64d36b38, transparent 58%), linear-gradient(160deg, #132525 0%, #152824 50%, #132018 100%);
-    --app-surface-tint: #4cdcbf17;
+    --background: 174 25% 10%;
+    --card: 174 22% 12%;
+    --popover: 174 22% 12%;
+    --sidebar-background: 174 22% 11%;
+    --primary: 164 63% 57%;
+    --accent: 145 62% 58%;
+    --ring: 164 63% 57%;
+    --app-gradient: radial-gradient(1040px 560px at -10% -20%, #45d9b147, transparent 58%), radial-gradient(920px 520px at 112% 2%, #47d78338, transparent 58%), linear-gradient(160deg, #142423 0%, #152321 50%, #121c1a 100%);
+    --app-surface-tint: #4cd6b217;
   }
 
   .theme-nitro-sepia {
-    --background: 29 24% 11%;
-    --card: 29 21% 13%;
-    --popover: 29 21% 13%;
-    --sidebar-background: 29 21% 12%;
-    --primary: 30 39% 58%;
-    --accent: 22 33% 54%;
-    --ring: 30 39% 58%;
-    --app-gradient: radial-gradient(1040px 560px at -10% -20%, #b88a513d, transparent 58%), radial-gradient(920px 520px at 112% 2%, #a76f5233, transparent 58%), linear-gradient(160deg, #271e16 0%, #29201a 50%, #1e1815 100%);
-    --app-surface-tint: #be946a14;
+    --background: 27 24% 11%;
+    --card: 27 21% 13%;
+    --popover: 27 21% 13%;
+    --sidebar-background: 27 21% 12%;
+    --primary: 28 44% 62%;
+    --accent: 36 39% 62%;
+    --ring: 28 44% 62%;
+    --app-gradient: radial-gradient(1040px 560px at -10% -20%, #c7966b42, transparent 58%), radial-gradient(920px 520px at 112% 2%, #c2a17033, transparent 58%), linear-gradient(160deg, #261e17 0%, #251e18 50%, #1e1915 100%);
+    --app-surface-tint: #c99b7314;
   }
 
   .theme-nitro-memory-lane {
-    --background: 264 24% 11%;
-    --card: 264 21% 13%;
-    --popover: 264 21% 13%;
-    --sidebar-background: 264 21% 12%;
-    --primary: 277 62% 71%;
-    --accent: 196 56% 63%;
-    --ring: 277 62% 71%;
-    --app-gradient: radial-gradient(1020px 560px at -10% -20%, #c783e24f, transparent 58%), radial-gradient(920px 520px at 112% 0%, #69b9d83b, transparent 58%), linear-gradient(160deg, #1e1528 0%, #1e1929 48%, #141b1f 100%);
-    --app-surface-tint: #c087e317;
-  }
-
-  .light[class*="theme-nitro-"] {
-    --background: 0 0% 100%;
-    --foreground: 225 22% 12%;
-    --card: 0 0% 100%;
-    --card-foreground: 225 22% 12%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 225 22% 12%;
-    --secondary: 220 28% 94%;
-    --secondary-foreground: 225 18% 16%;
-    --muted: 220 28% 95%;
-    --muted-foreground: 224 14% 40%;
-    --border: 220 24% 88%;
-    --input: 220 24% 88%;
-    --sidebar-background: 0 0% 99%;
-    --sidebar-foreground: 225 18% 16%;
-    --sidebar-accent: 220 28% 95%;
-    --sidebar-accent-foreground: 225 18% 16%;
-    --sidebar-border: 220 24% 88%;
-    --app-gradient: radial-gradient(1100px 580px at -10% -15%, hsl(var(--primary) / .27), transparent 58%), radial-gradient(980px 560px at 112% 0%, hsl(var(--accent) / .22), transparent 58%), linear-gradient(165deg, #fff 0%, #f5f7fa 52%, #eaeef5 100%);
-    --app-surface-tint: hsl(var(--primary) / .05);
+    --background: 280 20% 11%;
+    --card: 280 18% 13%;
+    --popover: 280 18% 13%;
+    --sidebar-background: 280 18% 12%;
+    --primary: 277 54% 68%;
+    --accent: 195 48% 64%;
+    --ring: 277 54% 68%;
+    --app-gradient: radial-gradient(1040px 560px at -10% -20%, #bc6ed847, transparent 58%), radial-gradient(920px 520px at 112% 2%, #6eb1cf38, transparent 58%), linear-gradient(160deg, #211726 0%, #201825 50%, #1a151e 100%);
+    --app-surface-tint: #b881d917;
   }
 }
 
 @layer components;
 
 @layer utilities {
+  .pointer-events-none {
+    pointer-events: none;
+  }
+
   .absolute {
     position: absolute;
   }
@@ -735,6 +794,66 @@
 
   .inset-0 {
     inset: calc(var(--spacing) * 0);
+  }
+
+  .top-6 {
+    top: calc(var(--spacing) * 6);
+  }
+
+  .top-8 {
+    top: calc(var(--spacing) * 8);
+  }
+
+  .top-20 {
+    top: calc(var(--spacing) * 20);
+  }
+
+  .top-\[230px\] {
+    top: 230px;
+  }
+
+  .top-\[240px\] {
+    top: 240px;
+  }
+
+  .top-\[300px\] {
+    top: 300px;
+  }
+
+  .top-\[310px\] {
+    top: 310px;
+  }
+
+  .top-\[330px\] {
+    top: 330px;
+  }
+
+  .right-0 {
+    right: calc(var(--spacing) * 0);
+  }
+
+  .right-2 {
+    right: calc(var(--spacing) * 2);
+  }
+
+  .right-6 {
+    right: calc(var(--spacing) * 6);
+  }
+
+  .left-0 {
+    left: calc(var(--spacing) * 0);
+  }
+
+  .left-2 {
+    left: calc(var(--spacing) * 2);
+  }
+
+  .left-6 {
+    left: calc(var(--spacing) * 6);
+  }
+
+  .left-8 {
+    left: calc(var(--spacing) * 8);
   }
 
   .mx-auto {
@@ -817,6 +936,18 @@
     height: 100%;
   }
 
+  .max-h-\[420px\] {
+    max-height: 420px;
+  }
+
+  .min-h-\[440px\] {
+    min-height: 440px;
+  }
+
+  .min-h-\[540px\] {
+    min-height: 540px;
+  }
+
   .min-h-screen {
     min-height: 100vh;
   }
@@ -835,6 +966,30 @@
 
   .w-12 {
     width: calc(var(--spacing) * 12);
+  }
+
+  .w-\[40\%\] {
+    width: 40%;
+  }
+
+  .w-\[44\%\] {
+    width: 44%;
+  }
+
+  .w-\[46\%\] {
+    width: 46%;
+  }
+
+  .w-\[48\%\] {
+    width: 48%;
+  }
+
+  .w-\[52\%\] {
+    width: 52%;
+  }
+
+  .w-\[56\%\] {
+    width: 56%;
   }
 
   .w-full {
@@ -871,12 +1026,12 @@
     cursor: not-allowed;
   }
 
-  .grid-cols-1 {
-    grid-template-columns: repeat(1, minmax(0, 1fr));
-  }
-
   .grid-cols-2 {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .grid-cols-3 {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 
   .flex-col {
@@ -885,6 +1040,10 @@
 
   .flex-wrap {
     flex-wrap: wrap;
+  }
+
+  .items-baseline {
+    align-items: baseline;
   }
 
   .items-center {
@@ -927,6 +1086,10 @@
     gap: calc(var(--spacing) * 8);
   }
 
+  .gap-10 {
+    gap: calc(var(--spacing) * 10);
+  }
+
   .gap-12 {
     gap: calc(var(--spacing) * 12);
   }
@@ -965,6 +1128,10 @@
     --tw-space-y-reverse: 0;
     margin-block-start: calc(calc(var(--spacing) * 6) * var(--tw-space-y-reverse));
     margin-block-end: calc(calc(var(--spacing) * 6) * calc(1 - var(--tw-space-y-reverse)));
+  }
+
+  .overflow-auto {
+    overflow: auto;
   }
 
   .overflow-hidden {
@@ -1156,6 +1323,16 @@
     }
   }
 
+  .bg-black\/80 {
+    background-color: #000c;
+  }
+
+  @supports (color: color-mix(in lab, red, red)) {
+    .bg-black\/80 {
+      background-color: color-mix(in oklab, var(--color-black) 80%, transparent);
+    }
+  }
+
   .bg-border\/60 {
     background-color: color-mix(in srgb, hsl(var(--border)) 60%, transparent);
   }
@@ -1242,6 +1419,10 @@
     background-color: #0000;
   }
 
+  .p-2 {
+    padding: calc(var(--spacing) * 2);
+  }
+
   .p-3 {
     padding: calc(var(--spacing) * 3);
   }
@@ -1288,6 +1469,10 @@
 
   .pt-0 {
     padding-top: calc(var(--spacing) * 0);
+  }
+
+  .pt-6 {
+    padding-top: calc(var(--spacing) * 6);
   }
 
   .pt-12 {
@@ -1343,6 +1528,10 @@
   .text-xs {
     font-size: var(--text-xs);
     line-height: var(--tw-leading, var(--text-xs--line-height));
+  }
+
+  .text-\[10px\] {
+    font-size: 10px;
   }
 
   .font-medium {
@@ -1418,6 +1607,11 @@
 
   .shadow-\[0_0_25px_hsl\(var\(--primary\)_\/_0\.35\)\] {
     --tw-shadow: 0 0 25px var(--tw-shadow-color, hsl(var(--primary) / .35));
+    box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
+  }
+
+  .shadow-\[0_0_80px_hsl\(var\(--primary\)_\/_0\.15\)\] {
+    --tw-shadow: 0 0 80px var(--tw-shadow-color, hsl(var(--primary) / .15));
     box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
   }
 
@@ -1557,8 +1751,8 @@
   }
 
   @media (width >= 40rem) {
-    .sm\:grid-cols-2 {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
+    .sm\:grid-cols-3 {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
     }
   }
 
@@ -1572,18 +1766,6 @@
     .md\:text-5xl {
       font-size: var(--text-5xl);
       line-height: var(--tw-leading, var(--text-5xl--line-height));
-    }
-  }
-
-  @media (width >= 64rem) {
-    .lg\:col-span-2 {
-      grid-column: span 2 / span 2;
-    }
-  }
-
-  @media (width >= 64rem) {
-    .lg\:grid-cols-2 {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
     }
   }
 
@@ -1624,20 +1806,14 @@
   }
 
   @media (width >= 64rem) {
-    .lg\:flex-row {
-      flex-direction: row;
+    .lg\:grid-cols-\[260px_1fr\] {
+      grid-template-columns: 260px 1fr;
     }
   }
 
   @media (width >= 64rem) {
     .lg\:items-center {
       align-items: center;
-    }
-  }
-
-  @media (width >= 64rem) {
-    .lg\:justify-between {
-      justify-content: space-between;
     }
   }
 

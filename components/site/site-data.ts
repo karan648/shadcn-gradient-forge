@@ -2,6 +2,7 @@ export const navItems = [
   { label: "Home", href: "/" },
   { label: "Studio", href: "/studio" },
   { label: "Gallery", href: "/gallery" },
+  { label: "Components", href: "/library" },
   { label: "Docs", href: "/docs" },
 ];
 

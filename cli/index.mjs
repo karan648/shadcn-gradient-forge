@@ -28,7 +28,7 @@ const usage = () => {
   log("gradient-forge CLI");
   log("");
   log("Usage:");
-  log("  gradient-forge init --path <project-root> [--inject] [--force] [--yes]");
+  log("  gradient-forge init --path <project-root> [--inject] [--force] [--yes] [--tui]");
   log("  gradient-forge help");
   log("");
   log("Options:");
@@ -36,6 +36,7 @@ const usage = () => {
   log("  --inject Append theme CSS to app/globals.css if it exists");
   log("  --force  Overwrite existing generated files");
   log("  --yes    Skip prompts and use defaults");
+  log("  --tui    Enable arrow-key selector (disables normal scroll)");
 };
 
 const ensureDir = (dir) => {
@@ -100,6 +101,30 @@ const themes = [
 const DEFAULT_THEME = "theme-nitro-midnight-blurple";
 const DEFAULT_MODE = "dark";
 
+const promptSelectSimple = async (title, items, defaultIndex = 0) => {
+  const list = items.map((item, i) => {
+    const label = item.label ?? item;
+    const mark = i === defaultIndex ? "*" : " ";
+    return `${mark} [${i + 1}] ${label}`;
+  });
+
+  log(title);
+  log("");
+  list.forEach((line) => log(line));
+  log("");
+  const rl = readline.createInterface({ input: process.stdin, output: process.stdout });
+  const answer = await new Promise((resolve) => {
+    rl.question(`Choose 1-${items.length} (default ${defaultIndex + 1}): `, resolve);
+  });
+  rl.close();
+
+  const parsed = Number.parseInt(String(answer).trim(), 10);
+  if (Number.isNaN(parsed) || parsed < 1 || parsed > items.length) {
+    return items[defaultIndex];
+  }
+  return items[parsed - 1];
+};
+
 const promptSelect = async (title, items, defaultIndex = 0) => {
   return new Promise((resolve) => {
     if (!process.stdin.isTTY) {
@@ -163,7 +188,7 @@ const promptSelect = async (title, items, defaultIndex = 0) => {
 
 const promptYesNo = async (title, defaultYes = true) => {
   const items = defaultYes ? ["Yes", "No"] : ["No", "Yes"];
-  const choice = await promptSelect(title, items, 0);
+  const choice = await promptSelectSimple(title, items, 0);
   return choice === "Yes";
 };
 
@@ -171,18 +196,21 @@ const init = async () => {
   const targetRoot = path.resolve(readArg("--path", process.cwd()));
   const force = hasFlag("--force");
   const yes = hasFlag("--yes");
+  const tui = hasFlag("--tui");
 
   log("");
   log("Gradient Forge");
   log("Crafting the theme engine for your shadcn project...");
   log("");
 
+  const select = tui ? promptSelect : promptSelectSimple;
+
   const themeChoice = yes
     ? themes.find((theme) => theme.id === DEFAULT_THEME) ?? themes[0]
-    : await promptSelect("Pick a default theme", themes, themes.findIndex((t) => t.id === DEFAULT_THEME));
+    : await select("Pick a default theme", themes, themes.findIndex((t) => t.id === DEFAULT_THEME));
   const modeChoice = yes
     ? DEFAULT_MODE
-    : await promptSelect("Pick a default color mode", ["dark", "light"], DEFAULT_MODE === "dark" ? 0 : 1);
+    : await select("Pick a default color mode", ["dark", "light"], DEFAULT_MODE === "dark" ? 0 : 1);
   const inject = yes ? hasFlag("--inject") : await promptYesNo("Inject theme CSS into app/globals.css?", true);
 
   const themeDir = path.join(targetRoot, "gradient-forge");

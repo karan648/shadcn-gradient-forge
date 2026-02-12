@@ -18,7 +18,7 @@ export default function HomePage() {
       <section className="mx-auto flex w-full max-w-6xl flex-col gap-12">
         <SiteHeader />
 
-        <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
+        <div className="grid gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:items-center">
           <div className="space-y-5">
             <Badge variant="glass">Nitro Gradient Forge</Badge>
             <h1 className="max-w-2xl text-4xl font-semibold tracking-tight md:text-5xl">
@@ -40,19 +40,82 @@ export default function HomePage() {
               </Button>
             </div>
           </div>
-          <div className="grid w-full max-w-sm gap-4">
-            {statCards.map((stat) => (
-              <Card key={stat.label} className="border-border/40 bg-background/60">
+          <div className="relative min-h-[540px] w-full overflow-hidden">
+            <div className="absolute inset-0 rounded-3xl border border-border/40 bg-background/40 shadow-[0_0_80px_hsl(var(--primary)_/_0.15)]" />
+
+            <div className="pointer-events-none absolute left-0 top-6 w-[52%] animate-float-slow">
+              <Card className="border-border/40 bg-card/70">
                 <CardHeader className="pb-2">
-                  <CardTitle className="text-sm font-medium text-muted-foreground">
-                    {stat.label}
-                  </CardTitle>
+                  <CardTitle className="text-base">Pricing Tier</CardTitle>
                 </CardHeader>
-                <CardContent>
-                  <p className="text-3xl font-semibold">{stat.value}</p>
+                <CardContent className="space-y-2">
+                  <p className="text-xs text-muted-foreground">Launch-ready plan for teams.</p>
+                  <p className="text-2xl font-semibold">$29</p>
+                  <Button className="w-full">Start free trial</Button>
                 </CardContent>
               </Card>
-            ))}
+            </div>
+
+            <div className="pointer-events-none absolute right-0 top-20 w-[48%] animate-float">
+              <Card className="border-border/40 bg-card/70">
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-base">Inline Alert</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-2">
+                  <p className="text-xs text-muted-foreground">
+                    Gradient tokens keep alerts readable across themes.
+                  </p>
+                  <Badge variant="outline">System Update</Badge>
+                  <Button variant="secondary" className="w-full">
+                    Review changes
+                  </Button>
+                </CardContent>
+              </Card>
+            </div>
+
+            <div className="pointer-events-none absolute left-6 top-[240px] w-[56%] animate-float">
+              <Card className="border-border/40 bg-card/70">
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-base">Status Panel</CardTitle>
+                </CardHeader>
+                <CardContent className="grid grid-cols-3 gap-2">
+                  <div className="rounded-2xl border border-border/40 bg-background/50 p-2">
+                    <p className="text-[10px] text-muted-foreground">Themes</p>
+                    <p className="text-sm font-semibold">23</p>
+                  </div>
+                  <div className="rounded-2xl border border-border/40 bg-background/50 p-2">
+                    <p className="text-[10px] text-muted-foreground">Layers</p>
+                    <p className="text-sm font-semibold">5</p>
+                  </div>
+                  <div className="rounded-2xl border border-border/40 bg-background/50 p-2">
+                    <p className="text-[10px] text-muted-foreground">Exports</p>
+                    <p className="text-sm font-semibold">4</p>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+
+            <div className="pointer-events-none absolute right-2 top-[330px] w-[44%] animate-float-slow">
+              <Card className="border-border/40 bg-card/70">
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-base">Launch Checklist</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-2 text-xs text-muted-foreground">
+                  <div className="flex items-center justify-between rounded-xl border border-border/40 bg-background/50 p-2">
+                    <span>Theme synced</span>
+                    <Badge variant="glass">Done</Badge>
+                  </div>
+                  <div className="flex items-center justify-between rounded-xl border border-border/40 bg-background/50 p-2">
+                    <span>Tokens mapped</span>
+                    <Badge variant="glass">Done</Badge>
+                  </div>
+                  <div className="flex items-center justify-between rounded-xl border border-border/40 bg-background/50 p-2">
+                    <span>Export ready</span>
+                    <Badge variant="outline">Pending</Badge>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
           </div>
         </div>
 
@@ -154,96 +217,23 @@ export default function HomePage() {
         </section>
 
         <section className="grid gap-6 lg:grid-cols-[1.05fr_1fr]">
+          <ThemeExporter />
           <Card className="border-border/50 bg-background/60">
             <CardHeader>
-              <CardTitle>Component Preview</CardTitle>
+              <CardTitle>Live Preview</CardTitle>
               <p className="text-sm text-muted-foreground">
-                More shadcn-style components to show how the theme behaves across surfaces.
+                Export tokens and watch the hero preview respond instantly.
               </p>
             </CardHeader>
-            <CardContent className="grid grid-cols-1 gap-4 xl:grid-cols-2">
-              <Card className="border-border/40 bg-card/70">
-                <CardHeader className="pb-2">
-                  <CardTitle className="text-base">Pricing Tier</CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-3">
-                  <p className="text-xs text-muted-foreground">Launch-ready plan for teams.</p>
-                  <p className="text-2xl font-semibold">$29</p>
-                  <Button className="w-full">Start free trial</Button>
-                </CardContent>
-              </Card>
-              <Card className="border-border/40 bg-card/70">
-                <CardHeader className="pb-2">
-                  <CardTitle className="text-base">Inline Alert</CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-3">
-                  <p className="text-xs text-muted-foreground">
-                    Gradient tokens keep alerts readable across themes.
-                  </p>
-                  <Badge variant="outline">System Update</Badge>
-                  <Button variant="secondary" className="w-full">
-                    Review changes
-                  </Button>
-                </CardContent>
-              </Card>
-              <Card className="border-border/40 bg-card/70 xl:col-span-2">
-                <CardHeader className="pb-2">
-                  <CardTitle className="text-base">Status Panel</CardTitle>
-                </CardHeader>
-                <CardContent className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-3">
-                  <div className="rounded-2xl border border-border/40 bg-background/50 p-3">
-                    <p className="text-xs text-muted-foreground">Active Themes</p>
-                    <p className="text-lg font-semibold">23</p>
-                  </div>
-                  <div className="rounded-2xl border border-border/40 bg-background/50 p-3">
-                    <p className="text-xs text-muted-foreground">Surface Layers</p>
-                    <p className="text-lg font-semibold">5</p>
-                  </div>
-                  <div className="rounded-2xl border border-border/40 bg-background/50 p-3">
-                    <p className="text-xs text-muted-foreground">Export Targets</p>
-                    <p className="text-lg font-semibold">4</p>
-                  </div>
-                </CardContent>
-              </Card>
-              <Card className="border-border/40 bg-card/70">
-                <CardHeader className="pb-2">
-                  <CardTitle className="text-base">Activity Feed</CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-3 text-xs text-muted-foreground">
-                  <div className="rounded-xl border border-border/40 bg-background/50 p-3">
-                    New theme applied: Midnight Blurple
-                  </div>
-                  <div className="rounded-xl border border-border/40 bg-background/50 p-3">
-                    Surface tint optimized for cards
-                  </div>
-                  <div className="rounded-xl border border-border/40 bg-background/50 p-3">
-                    Exported Tailwind aliases
-                  </div>
-                </CardContent>
-              </Card>
-              <Card className="border-border/40 bg-card/70">
-                <CardHeader className="pb-2">
-                  <CardTitle className="text-base">Launch Checklist</CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-3 text-xs text-muted-foreground">
-                  <div className="flex items-center justify-between rounded-xl border border-border/40 bg-background/50 p-3">
-                    <span>Theme synced</span>
-                    <Badge variant="glass">Done</Badge>
-                  </div>
-                  <div className="flex items-center justify-between rounded-xl border border-border/40 bg-background/50 p-3">
-                    <span>Tokens mapped</span>
-                    <Badge variant="glass">Done</Badge>
-                  </div>
-                  <div className="flex items-center justify-between rounded-xl border border-border/40 bg-background/50 p-3">
-                    <span>Export ready</span>
-                    <Badge variant="outline">Pending</Badge>
-                  </div>
-                </CardContent>
-              </Card>
+            <CardContent className="space-y-3 text-sm text-muted-foreground">
+              <div className="rounded-2xl border border-border/40 bg-background/50 p-4">
+                Use the studio to swap palettes and see the floating cards update in real time.
+              </div>
+              <Button variant="outline" asChild>
+                <a href="/studio">Open Studio</a>
+              </Button>
             </CardContent>
           </Card>
-
-          <ThemeExporter />
         </section>
 
         <section className="grid gap-6 lg:grid-cols-[1.1fr_0.9fr]">
