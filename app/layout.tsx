@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import "@/app/globals.css";
 import { ThemeProvider } from "@/components/theme/theme-context";
+import { ToastProvider } from "@/components/ui/toast";
+import { CommandPalette } from "@/components/ui/command-palette";
 
 export const metadata: Metadata = {
   title: "Shadcn Gradient Forge",
@@ -22,7 +24,12 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <body>
-        <ThemeProvider>{children}</ThemeProvider>
+        <ThemeProvider>
+          <ToastProvider>
+            {children}
+            <CommandPalette />
+          </ToastProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

@@ -4,106 +4,299 @@ import { useMemo, useState } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { cn } from "@/lib/utils";
+import { 
+  Check, 
+  Copy, 
+  Download, 
+  FileCode, 
+  Palette, 
+  Code2, 
+  Braces, 
+  FileJson,
+  Layers,
+  FileType,
+  AlertCircle
+} from "lucide-react";
+import { type ThemeId, NITRO_ALL_THEMES } from "./theme-engine";
+import { 
+  exportTokens, 
+  downloadFile, 
+  copyToClipboard, 
+  exportFormats,
+  type ExportFormat,
+  generateAllThemesCSS,
+  getThemeTokens,
+} from "./token-export-utils";
 
-type ExportBlock = {
-  id: string;
-  label: string;
-  description: string;
-  code: string;
-  language: string;
-};
+type CopyStatus = "idle" | "copying" | "copied" | "error";
 
-const exportBlocks: ExportBlock[] = [
-  {
-    id: "root-class",
-    label: "Root Theme Hook",
-    description: "Attach the active theme class and data attributes to your root element.",
-    code: `<html class="dark theme-nitro-midnight-blurple" data-theme="theme-nitro-midnight-blurple" data-color-mode="dark">`,
-    language: "html",
-  },
-  {
-    id: "surface-layer",
-    label: "Surface Layer Tokens",
-    description: "Drop-in surface styles that tint cards, popovers, and sidebars.",
-    code: `.bg-card {\n  background-color: hsl(var(--background) / 0.34);\n  background-image: linear-gradient(var(--app-surface-tint), var(--app-surface-tint));\n  backdrop-filter: blur(16px);\n}`,
-    language: "css",
-  },
-  {
-    id: "tailwind-alias",
-    label: "Tailwind Alias",
-    description: "Map Tailwind colors to the theme tokens for component parity.",
-    code: `colors: {\n  background: "hsl(var(--background))",\n  foreground: "hsl(var(--foreground))",\n  primary: "hsl(var(--primary))",\n  accent: "hsl(var(--accent))",\n}`,
-    language: "ts",
-  },
-];
+interface ThemeExporterProps {
+  themeId?: ThemeId;
+  colorMode?: "dark" | "light";
+}
 
-const copyLabel = (status: "idle" | "copied" | "error") => {
-  if (status === "copied") return "Copied";
-  if (status === "error") return "Copy failed";
-  return "Copy";
-};
+export function ThemeExporter({ themeId = "theme-nitro-midnight-blurple", colorMode = "dark" }: ThemeExporterProps) {
+  const [selectedFormat, setSelectedFormat] = useState<ExportFormat>("css");
+  const [copyState, setCopyState] = useState<Record<string, CopyStatus>>({});
+  const [activeTab, setActiveTab] = useState<string>("single");
 
-export function ThemeExporter() {
-  const [copyState, setCopyState] = useState<Record<string, "idle" | "copied" | "error">>({});
+  const exportResult = useMemo(() => {
+    return exportTokens({ 
+      format: selectedFormat, 
+      themeId, 
+      colorMode 
+    });
+  }, [selectedFormat, themeId, colorMode]);
 
-  const blocks = useMemo(() => exportBlocks, []);
+  const allThemesExport = useMemo(() => {
+    return generateAllThemesCSS();
+  }, []);
 
-  const handleCopy = async (block: ExportBlock) => {
-    try {
-      await navigator.clipboard.writeText(block.code);
-      setCopyState((prev) => ({ ...prev, [block.id]: "copied" }));
-      window.setTimeout(() => {
-        setCopyState((prev) => ({ ...prev, [block.id]: "idle" }));
-      }, 1400);
-    } catch {
-      setCopyState((prev) => ({ ...prev, [block.id]: "error" }));
+  const tokens = useMemo(() => {
+    return getThemeTokens(themeId);
+  }, [themeId]);
+
+  const handleCopy = async (id: string, content: string) => {
+    setCopyState((prev) => ({ ...prev, [id]: "copying" }));
+    const success = await copyToClipboard(content);
+    setCopyState((prev) => ({ ...prev, [id]: success ? "copied" : "error" }));
+    window.setTimeout(() => {
+      setCopyState((prev) => ({ ...prev, [id]: "idle" }));
+    }, 1400);
+  };
+
+  const handleDownload = (result: ReturnType<typeof exportTokens>) => {
+    downloadFile(result);
+  };
+
+  const copyLabel = (status: CopyStatus) => {
+    if (status === "copying") return "Copying...";
+    if (status === "copied") return "Copied!";
+    if (status === "error") return "Failed";
+    return "Copy";
+  };
+
+  const getFormatIcon = (format: ExportFormat) => {
+    switch (format) {
+      case "css":
+      case "css-variables":
+        return <FileCode className="h-4 w-4" />;
+      case "scss":
+        return <Palette className="h-4 w-4" />;
+      case "json":
+      case "w3c-tokens":
+      case "figma-tokens":
+        return <FileJson className="h-4 w-4" />;
+      case "tailwind":
+        return <Layers className="h-4 w-4" />;
+      case "html-root":
+        return <FileType className="h-4 w-4" />;
+      default:
+        return <Code2 className="h-4 w-4" />;
     }
   };
+
+  const currentStatus = copyState["export"] ?? "idle";
+  const allThemesStatus = copyState["all-themes"] ?? "idle";
 
   return (
     <Card className="border-border/50 bg-background/60">
       <CardHeader className="flex flex-col gap-2">
         <div className="flex flex-wrap items-center justify-between gap-2">
-          <CardTitle>Theme Export</CardTitle>
-          <Badge variant="glass">Copy Ready</Badge>
+          <div>
+            <CardTitle>Theme Export</CardTitle>
+            <p className="text-sm text-muted-foreground mt-1">
+              Export {themeId.replace("theme-nitro-", "").replace(/-/g, " ")} theme in multiple formats
+            </p>
+          </div>
+          <Badge variant="glass" className="gap-1">
+            <Braces className="h-3 w-3" /> Multi-Format
+          </Badge>
         </div>
-        <p className="text-sm text-muted-foreground">
-          Grab the exact tokens used in this studio and wire them into any shadcn project.
-        </p>
       </CardHeader>
       <CardContent className="grid gap-4">
-        {blocks.map((block) => {
-          const state = copyState[block.id] ?? "idle";
-          return (
-            <div
-              key={block.id}
-              className="rounded-2xl border border-border/40 bg-background/50 p-4"
-            >
-              <div className="flex flex-wrap items-center justify-between gap-3">
-                <div>
-                  <p className="text-sm font-semibold">{block.label}</p>
-                  <p className="text-xs text-muted-foreground">{block.description}</p>
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+          <TabsList className="grid w-full grid-cols-2">
+            <TabsTrigger value="single">Single Theme</TabsTrigger>
+            <TabsTrigger value="all">All Themes</TabsTrigger>
+          </TabsList>
+
+          <TabsContent value="single" className="space-y-4 mt-4">
+            {/* Format Selector */}
+            <div className="space-y-2">
+              <label className="text-sm font-medium">Export Format</label>
+              <Select value={selectedFormat} onValueChange={(v: string) => setSelectedFormat(v as ExportFormat)}>
+                <SelectTrigger className="w-full">
+                  <SelectValue placeholder="Select format" />
+                </SelectTrigger>
+                <SelectContent>
+                  {exportFormats.map((format) => (
+                    <SelectItem key={format.value} value={format.value}>
+                      <div className="flex items-center gap-2">
+                        {getFormatIcon(format.value)}
+                        <span>{format.label}</span>
+                        <span className="text-muted-foreground text-xs ml-auto">.{format.extension}</span>
+                      </div>
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              <p className="text-xs text-muted-foreground">
+                {exportFormats.find((f) => f.value === selectedFormat)?.description}
+              </p>
+            </div>
+
+            {/* Color Swatches Preview */}
+            <div className="rounded-2xl border border-border/40 bg-background/50 p-4">
+              <h4 className="text-sm font-semibold mb-3 flex items-center gap-2">
+                <Palette className="h-4 w-4" />
+                Theme Colors
+              </h4>
+              <div className="grid grid-cols-8 gap-2">
+                {[
+                  { name: "primary", value: tokens["--primary"] },
+                  { name: "secondary", value: tokens["--secondary"] },
+                  { name: "accent", value: tokens["--accent"] },
+                  { name: "background", value: tokens["--background"] },
+                  { name: "card", value: tokens["--card"] },
+                  { name: "muted", value: tokens["--muted"] },
+                  { name: "border", value: tokens["--border"] },
+                  { name: "destructive", value: tokens["--destructive"] },
+                ].map((color) => (
+                  <div key={color.name} className="group relative">
+                    <div
+                      className="w-full aspect-square rounded-lg border border-border/40 cursor-pointer transition-transform hover:scale-110"
+                      style={{ backgroundColor: `hsl(${color.value})` }}
+                      title={`${color.name}: ${color.value}`}
+                      onClick={() => handleCopy(`color-${color.name}`, color.value)}
+                    />
+                    <span className="text-[10px] text-muted-foreground text-center block mt-1 truncate">
+                      {color.name}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Code Preview */}
+            <div className="rounded-2xl border border-border/40 bg-background/50 p-4">
+              <div className="flex flex-wrap items-center justify-between gap-3 mb-3">
+                <div className="flex items-center gap-2">
+                  {getFormatIcon(selectedFormat)}
+                  <span className="text-sm font-semibold">
+                    {exportResult.filename}
+                  </span>
                 </div>
-                <Button
-                  size="sm"
-                  variant={state === "copied" ? "glow" : "outline"}
-                  onClick={() => handleCopy(block)}
-                >
-                  {copyLabel(state)}
-                </Button>
+                <div className="flex gap-2">
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    onClick={() => handleCopy("export", exportResult.content)}
+                    disabled={currentStatus === "copying"}
+                  >
+                    {currentStatus === "copied" ? (
+                      <Check className="h-4 w-4 mr-1" />
+                    ) : currentStatus === "error" ? (
+                      <AlertCircle className="h-4 w-4 mr-1" />
+                    ) : (
+                      <Copy className="h-4 w-4 mr-1" />
+                    )}
+                    {copyLabel(currentStatus)}
+                  </Button>
+                  <Button
+                    size="sm"
+                    variant="default"
+                    onClick={() => handleDownload(exportResult)}
+                  >
+                    <Download className="h-4 w-4 mr-1" />
+                    Download
+                  </Button>
+                </div>
               </div>
               <pre
                 className={cn(
-                  "mt-3 overflow-x-auto rounded-2xl bg-black/70 p-3 text-xs text-white/90",
-                  "border border-white/10",
+                  "overflow-x-auto rounded-2xl bg-black/80 p-4 text-xs text-white/90",
+                  "border border-white/10 max-h-[400px] overflow-y-auto"
                 )}
               >
-                <code className={`language-${block.language}`}>{block.code}</code>
+                <code>{exportResult.content}</code>
               </pre>
             </div>
-          );
-        })}
+
+            {/* Quick Actions */}
+            <div className="grid grid-cols-2 gap-2">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => handleCopy("root-attrs", `<html class="${colorMode} ${themeId}" data-theme="${themeId}" data-color-mode="${colorMode}">`)}
+              >
+                <Code2 className="h-4 w-4 mr-2" />
+                Copy Root Attributes
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => handleCopy("surface-css", `.bg-card {
+  background-color: hsl(var(--background) / 0.34);
+  background-image: linear-gradient(var(--app-surface-tint), var(--app-surface-tint));
+  backdrop-filter: blur(16px);
+}`)}
+              >
+                <Layers className="h-4 w-4 mr-2" />
+                Copy Surface CSS
+              </Button>
+            </div>
+          </TabsContent>
+
+          <TabsContent value="all" className="space-y-4 mt-4">
+            <div className="rounded-2xl border border-border/40 bg-background/50 p-4">
+              <div className="flex flex-wrap items-center justify-between gap-3 mb-3">
+                <div>
+                  <h4 className="text-sm font-semibold">All Themes CSS</h4>
+                  <p className="text-xs text-muted-foreground">
+                    Export all {NITRO_ALL_THEMES.length} themes in a single CSS file
+                  </p>
+                </div>
+                <div className="flex gap-2">
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    onClick={() => handleCopy("all-themes", allThemesExport.content)}
+                    disabled={allThemesStatus === "copying"}
+                  >
+                    {allThemesStatus === "copied" ? (
+                      <Check className="h-4 w-4 mr-1" />
+                    ) : allThemesStatus === "error" ? (
+                      <AlertCircle className="h-4 w-4 mr-1" />
+                    ) : (
+                      <Copy className="h-4 w-4 mr-1" />
+                    )}
+                    {copyLabel(allThemesStatus)}
+                  </Button>
+                  <Button
+                    size="sm"
+                    variant="default"
+                    onClick={() => handleDownload(allThemesExport)}
+                  >
+                    <Download className="h-4 w-4 mr-1" />
+                    Download All
+                  </Button>
+                </div>
+              </div>
+              <pre
+                className={cn(
+                  "overflow-x-auto rounded-2xl bg-black/80 p-4 text-xs text-white/90",
+                  "border border-white/10 max-h-[300px] overflow-y-auto"
+                )}
+              >
+                <code>{allThemesExport.content.substring(0, 1500)}...</code>
+              </pre>
+            </div>
+          </TabsContent>
+        </Tabs>
       </CardContent>
     </Card>
   );

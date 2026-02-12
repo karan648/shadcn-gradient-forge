@@ -4,23 +4,48 @@ import { useMemo, useState } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { AlertCircle, Check, Copy, FileCode2, Loader2 } from "lucide-react";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { AlertCircle, Check, Copy, FileCode2, Loader2, Download, Palette } from "lucide-react";
+import { type ThemeId, NITRO_ALL_THEMES } from "./theme-engine";
+import { 
+  exportTokens, 
+  downloadFile, 
+  copyToClipboard,
+  generateAllThemesCSS,
+  getThemeTokens,
+  type ExportFormat,
+} from "./token-export-utils";
 
-type CodeSnippet = {
-  id: string;
-  label: string;
-  path: string;
-  description: string;
-  code: string;
-};
+type CopyStatus = "idle" | "copying" | "copied" | "error";
+type TabValue = "preview" | "code" | "tokens";
 
-const snippets: CodeSnippet[] = [
-  {
-    id: "root-layout",
-    label: "Root Layout",
-    path: "app/layout.tsx",
-    description: "Set default theme and wrap app with ThemeProvider.",
-    code: `import type { Metadata } from "next";
+interface StudioCodePanelProps {
+  themeId?: ThemeId;
+  colorMode?: "dark" | "light";
+}
+
+export function StudioCodePanel({ themeId = "theme-nitro-midnight-blurple", colorMode = "dark" }: StudioCodePanelProps) {
+  const [tab, setTab] = useState<TabValue>("preview");
+  const [copyState, setCopyState] = useState<Record<string, CopyStatus>>({});
+  const [selectedFormat, setSelectedFormat] = useState<ExportFormat>("css");
+
+  const theme = useMemo(() => NITRO_ALL_THEMES.find((t) => t.id === themeId), [themeId]);
+  const tokens = useMemo(() => getThemeTokens(themeId), [themeId]);
+
+  const exportResult = useMemo(() => {
+    return exportTokens({ format: selectedFormat, themeId, colorMode });
+  }, [selectedFormat, themeId, colorMode]);
+
+  const allThemesExport = useMemo(() => generateAllThemesCSS(), []);
+
+  const snippets = useMemo(() => {
+    return [
+      {
+        id: "root-layout",
+        label: "Root Layout",
+        path: "app/layout.tsx",
+        description: "Set default theme and wrap app with ThemeProvider.",
+        code: `import type { Metadata } from "next";
 import "@/app/globals.css";
 import { ThemeProvider } from "@/components/theme/theme-context";
 
@@ -33,148 +58,92 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html
       lang="en"
-      className="dark theme-nitro-midnight-blurple"
-      data-theme="theme-nitro-midnight-blurple"
-      data-color-mode="dark"
+      className="${colorMode} ${themeId}"
+      data-theme="${themeId}"
+      data-color-mode="${colorMode}"
       suppressHydrationWarning
     >
       <body>
-        <ThemeProvider>{children}</ThemeProvider>
+        <ThemeProvider defaultTheme="${themeId}" defaultColorMode="${colorMode}">
+          {children}
+        </ThemeProvider>
       </body>
     </html>
   );
 }`,
-  },
+      },
+      {
+        id: "theme-engine",
+        label: "Theme Engine",
+        path: "components/theme/theme-engine.ts",
+        description: "Add and manage your theme presets.",
+        code: `export const NITRO_PUBLIC_THEMES = [
   {
-    id: "theme-engine",
-    label: "Theme Engine",
-    path: "components/theme/theme-engine.ts",
-    description: "Add and manage your theme presets.",
-    code: `export const NITRO_PUBLIC_THEMES = [
-  {
-    id: "theme-nitro-midnight-blurple",
-    label: "Midnight Blurple",
-    preview: "radial-gradient(...), linear-gradient(...)",
+    id: "${themeId}",
+    label: "${theme?.label ?? "Theme"}",
+    preview: "${theme?.preview ?? ""}",
   },
 ] as const;
 
-export const MEMORY_LANE_THEME = {
-  id: "theme-nitro-memory-lane",
-  label: "Memory Lane",
-  preview: "radial-gradient(...), linear-gradient(...)",
-} as const;`,
-  },
-  {
-    id: "globals",
-    label: "Global Tokens",
-    path: "app/globals.css",
-    description: "Define surface and app gradient tokens for all components.",
-    code: `.theme-nitro-midnight-blurple {
-  --background: 235 26% 11%;
-  --card: 235 22% 12%;
-  --primary: 241 92% 70%;
-  --accent: 210 92% 65%;
-  --ring: 241 92% 70%;
-  --app-gradient:
-    radial-gradient(1050px 560px at -10% -20%, hsl(246 92% 66% / 0.3), transparent 60%),
-    radial-gradient(920px 520px at 112% 2%, hsl(201 92% 63% / 0.22), transparent 58%),
-    linear-gradient(160deg, hsl(232 29% 12%) 0%, hsl(231 24% 12%) 50%, hsl(228 22% 10%) 100%);
-  --app-surface-tint: hsl(241 92% 70% / 0.1);
-}`,
-  },
-  {
-    id: "theme-context",
-    label: "Theme Context",
-    path: "components/theme/theme-context.tsx",
-    description: "Client provider that applies theme and color mode state.",
-    code: `"use client";
+export type ThemeId = (typeof NITRO_PUBLIC_THEMES)[number]["id"];`,
+      },
+      {
+        id: "globals",
+        label: "Global Tokens",
+        path: "app/globals.css",
+        description: "Define surface and app gradient tokens for all components.",
+        code: generateThemeCSS(themeId, tokens),
+      },
+      {
+        id: "theme-context",
+        label: "Theme Context",
+        path: "components/theme/theme-context.tsx",
+        description: "Client provider that applies theme and color mode state.",
+        code: generateThemeContextCode(themeId, colorMode),
+      },
+    ];
+  }, [themeId, colorMode, theme, tokens]);
 
-import { createContext, useContext, useState } from "react";
-import { applyTheme } from "@/components/theme/theme-engine";
-
-const ThemeContext = createContext(null);
-
-export function ThemeProvider({ children }: { children: React.ReactNode }) {
-  const [themeId, setThemeId] = useState("theme-nitro-midnight-blurple");
-  const [colorMode, setColorMode] = useState<"dark" | "light">("dark");
-
-  const updateTheme = (nextTheme: string) => {
-    setThemeId(nextTheme);
-    applyTheme(nextTheme, colorMode);
-  };
-
-  const updateMode = (nextMode: "dark" | "light") => {
-    setColorMode(nextMode);
-    applyTheme(themeId, nextMode);
-  };
-
-  return (
-    <ThemeContext.Provider value={{ themeId, colorMode, setThemeId: updateTheme, setColorMode: updateMode }}>
-      {children}
-    </ThemeContext.Provider>
-  );
-}
-
-export const useThemeContext = () => {
-  const context = useContext(ThemeContext);
-  if (!context) throw new Error("useThemeContext must be used within ThemeProvider");
-  return context;
-};`,
-  },
-];
-
-const requiredSnippetIds = [
-  "root-layout",
-  "theme-engine",
-  "theme-context",
-  "globals",
-] as const;
-
-const getSetupPack = () => {
-  return requiredSnippetIds
-    .map((id) => snippets.find((snippet) => snippet.id === id))
-    .filter((snippet): snippet is CodeSnippet => Boolean(snippet))
-    .map((snippet) => `// ${snippet.path}\n${snippet.code}`)
-    .join("\n\n");
-};
-
-type CopyStatus = "idle" | "copying" | "copied" | "error";
-
-const copyLabel = (status: CopyStatus) => {
-  if (status === "copying") return "Copying...";
-  if (status === "copied") return "Copied";
-  if (status === "error") return "Copy failed";
-  return "Copy code";
-};
-
-export function StudioCodePanel() {
-  const [tab, setTab] = useState<"preview" | "code">("preview");
-  const [activeId, setActiveId] = useState(snippets[0].id);
-  const [copyState, setCopyState] = useState<Record<string, CopyStatus>>({});
-
+  const [activeSnippetId, setActiveSnippetId] = useState(snippets[0].id);
   const activeSnippet = useMemo(
-    () => snippets.find((snippet) => snippet.id === activeId) ?? snippets[0],
-    [activeId],
+    () => snippets.find((snippet) => snippet.id === activeSnippetId) ?? snippets[0],
+    [activeSnippetId, snippets]
   );
 
   const handleCopy = async (id: string, content: string) => {
     setCopyState((prev) => ({ ...prev, [id]: "copying" }));
-    try {
-      await navigator.clipboard.writeText(content);
-      setCopyState((prev) => ({ ...prev, [id]: "copied" }));
-      window.setTimeout(() => {
-        setCopyState((prev) => ({ ...prev, [id]: "idle" }));
-      }, 1400);
-    } catch {
-      setCopyState((prev) => ({ ...prev, [id]: "error" }));
-      window.setTimeout(() => {
-        setCopyState((prev) => ({ ...prev, [id]: "idle" }));
-      }, 2000);
-    }
+    const success = await copyToClipboard(content);
+    setCopyState((prev) => ({ ...prev, [id]: success ? "copied" : "error" }));
+    window.setTimeout(() => {
+      setCopyState((prev) => ({ ...prev, [id]: "idle" }));
+    }, 1400);
+  };
+
+  const handleDownload = (result: typeof exportResult) => {
+    downloadFile(result);
+  };
+
+  const copyLabel = (status: CopyStatus) => {
+    if (status === "copying") return "Copying...";
+    if (status === "copied") return "Copied";
+    if (status === "error") return "Copy failed";
+    return "Copy code";
   };
 
   const setupPackState = copyState["setup-pack"] ?? "idle";
   const activeSnippetState = copyState[activeSnippet.id] ?? "idle";
+  const tokensState = copyState["tokens"] ?? "idle";
+  const allThemesState = copyState["all-themes"] ?? "idle";
+
+  const requiredSnippetIds = ["root-layout", "theme-engine", "theme-context", "globals"] as const;
+
+  const getSetupPack = () => {
+    return requiredSnippetIds
+      .map((id) => snippets.find((snippet) => snippet.id === id))
+      .filter((snippet): snippet is typeof snippets[0] => Boolean(snippet))
+      .map((snippet) => `// ${snippet.path}\n${snippet.code}`)
+      .join("\n\n");
+  };
 
   return (
     <Card className="border-border/50 bg-background/60">
@@ -184,6 +153,11 @@ export function StudioCodePanel() {
             <CardTitle>Token Export</CardTitle>
             <p className="mt-1 text-sm text-muted-foreground">
               Preview install guidance or open full code snippets with copy actions.
+              {theme && (
+                <span className="block mt-1 font-medium text-foreground">
+                  Current theme: {theme.label}
+                </span>
+              )}
             </p>
           </div>
           <Badge variant="glass" className="gap-1">
@@ -205,6 +179,14 @@ export function StudioCodePanel() {
           >
             Code
           </Button>
+          <Button
+            variant={tab === "tokens" ? "default" : "ghost"}
+            size="sm"
+            onClick={() => setTab("tokens")}
+          >
+            <Palette className="h-3.5 w-3.5 mr-1" />
+            Tokens
+          </Button>
         </div>
       </CardHeader>
       <CardContent>
@@ -215,7 +197,25 @@ export function StudioCodePanel() {
               Add data-theme attributes to your app root, import global tokens, and use ThemeProvider to keep
               theme state synced across shadcn components.
             </p>
-            <div className="mt-3 flex flex-wrap gap-2">
+            
+            {/* Theme Preview */}
+            {theme && (
+              <div className="mt-4 p-4 rounded-xl bg-background/70 border border-border/40">
+                <div className="flex items-center gap-3">
+                  <div 
+                    className="w-16 h-16 rounded-xl shadow-lg"
+                    style={{ background: theme.preview }}
+                  />
+                  <div>
+                    <p className="font-medium">{theme.label}</p>
+                    <p className="text-xs text-muted-foreground font-mono">{theme.id}</p>
+                    <p className="text-xs text-muted-foreground mt-1 capitalize">{colorMode} mode</p>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            <div className="mt-4 flex flex-wrap gap-2">
               {requiredSnippetIds.map((id) => {
                 const snippet = snippets.find((item) => item.id === id);
                 if (!snippet) return null;
@@ -252,15 +252,15 @@ export function StudioCodePanel() {
               </Button>
             </div>
           </div>
-        ) : (
+        ) : tab === "code" ? (
           <div className="space-y-4">
             <div className="flex flex-wrap gap-2">
               {snippets.map((snippet) => (
                 <Button
                   key={snippet.id}
                   size="sm"
-                  variant={activeId === snippet.id ? "default" : "ghost"}
-                  onClick={() => setActiveId(snippet.id)}
+                  variant={activeSnippetId === snippet.id ? "default" : "ghost"}
+                  onClick={() => setActiveSnippetId(snippet.id)}
                 >
                   {snippet.label}
                 </Button>
@@ -273,48 +273,213 @@ export function StudioCodePanel() {
                   <p className="break-all text-sm font-semibold">{activeSnippet.path}</p>
                   <p className="text-xs text-muted-foreground">{activeSnippet.description}</p>
                 </div>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => handleCopy(activeSnippet.id, activeSnippet.code)}
-                  disabled={activeSnippetState === "copying"}
-                >
-                  {activeSnippetState === "copying" ? (
-                    <Loader2 className="h-4 w-4 animate-spin" />
-                  ) : activeSnippetState === "copied" ? (
-                    <Check className="h-4 w-4" />
-                  ) : activeSnippetState === "error" ? (
-                    <AlertCircle className="h-4 w-4" />
-                  ) : (
-                    <Copy className="h-4 w-4" />
-                  )}
-                  {copyLabel(activeSnippetState)}
-                </Button>
-                <Button
-                  variant="secondary"
-                  size="sm"
-                  onClick={() => handleCopy("setup-pack", getSetupPack())}
-                  disabled={setupPackState === "copying"}
-                >
-                  {setupPackState === "copying" ? (
-                    <Loader2 className="h-4 w-4 animate-spin" />
-                  ) : setupPackState === "copied" ? (
-                    <Check className="h-4 w-4" />
-                  ) : setupPackState === "error" ? (
-                    <AlertCircle className="h-4 w-4" />
-                  ) : (
-                    <Copy className="h-4 w-4" />
-                  )}
-                  {copyLabel(setupPackState)}
-                </Button>
+                <div className="flex gap-2">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => handleCopy(activeSnippet.id, activeSnippet.code)}
+                    disabled={activeSnippetState === "copying"}
+                  >
+                    {activeSnippetState === "copying" ? (
+                      <Loader2 className="h-4 w-4 animate-spin" />
+                    ) : activeSnippetState === "copied" ? (
+                      <Check className="h-4 w-4" />
+                    ) : activeSnippetState === "error" ? (
+                      <AlertCircle className="h-4 w-4" />
+                    ) : (
+                      <Copy className="h-4 w-4" />
+                    )}
+                    {copyLabel(activeSnippetState)}
+                  </Button>
+                  <Button
+                    variant="secondary"
+                    size="sm"
+                    onClick={() => handleCopy("setup-pack", getSetupPack())}
+                    disabled={setupPackState === "copying"}
+                  >
+                    {setupPackState === "copying" ? (
+                      <Loader2 className="h-4 w-4 animate-spin" />
+                    ) : setupPackState === "copied" ? (
+                      <Check className="h-4 w-4" />
+                    ) : setupPackState === "error" ? (
+                      <AlertCircle className="h-4 w-4" />
+                    ) : (
+                      <Copy className="h-4 w-4" />
+                    )}
+                    Copy All
+                  </Button>
+                </div>
               </div>
               <pre className="mt-4 max-h-[360px] overflow-auto rounded-2xl border border-border/40 bg-black/80 p-4 text-xs text-white/90">
                 <code>{activeSnippet.code}</code>
               </pre>
             </div>
           </div>
+        ) : (
+          <div className="space-y-4">
+            {/* Token Export Formats */}
+            <div className="flex flex-wrap gap-2">
+              {[
+                { value: "css" as ExportFormat, label: "CSS" },
+                { value: "json" as ExportFormat, label: "JSON" },
+                { value: "tailwind" as ExportFormat, label: "Tailwind" },
+                { value: "w3c-tokens" as ExportFormat, label: "W3C" },
+              ].map((format) => (
+                <Button
+                  key={format.value}
+                  size="sm"
+                  variant={selectedFormat === format.value ? "default" : "ghost"}
+                  onClick={() => setSelectedFormat(format.value)}
+                >
+                  {format.label}
+                </Button>
+              ))}
+            </div>
+
+            {/* Export Preview */}
+            <div className="rounded-2xl border border-border/40 bg-background/50 p-4">
+              <div className="flex flex-wrap items-center justify-between gap-3 mb-3">
+                <div>
+                  <p className="text-sm font-semibold">{exportResult.filename}</p>
+                  <p className="text-xs text-muted-foreground">
+                    {theme?.label} theme in {selectedFormat.toUpperCase()} format
+                  </p>
+                </div>
+                <div className="flex gap-2">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => handleCopy("tokens", exportResult.content)}
+                    disabled={tokensState === "copying"}
+                  >
+                    {tokensState === "copying" ? (
+                      <Loader2 className="h-4 w-4 animate-spin" />
+                    ) : tokensState === "copied" ? (
+                      <Check className="h-4 w-4" />
+                    ) : tokensState === "error" ? (
+                      <AlertCircle className="h-4 w-4" />
+                    ) : (
+                      <Copy className="h-4 w-4" />
+                    )}
+                    {copyLabel(tokensState)}
+                  </Button>
+                  <Button
+                    variant="default"
+                    size="sm"
+                    onClick={() => handleDownload(exportResult)}
+                  >
+                    <Download className="h-4 w-4 mr-1" />
+                    Download
+                  </Button>
+                </div>
+              </div>
+              <pre className="max-h-[300px] overflow-auto rounded-2xl border border-border/40 bg-black/80 p-4 text-xs text-white/90">
+                <code>{exportResult.content}</code>
+              </pre>
+            </div>
+
+            {/* All Themes Export */}
+            <div className="rounded-2xl border border-border/40 bg-background/50 p-4">
+              <div className="flex flex-wrap items-center justify-between gap-3">
+                <div>
+                  <p className="text-sm font-semibold">All Themes</p>
+                  <p className="text-xs text-muted-foreground">
+                    Export all {NITRO_ALL_THEMES.length} themes at once
+                  </p>
+                </div>
+                <div className="flex gap-2">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => handleCopy("all-themes", allThemesExport.content)}
+                    disabled={allThemesState === "copying"}
+                  >
+                    {allThemesState === "copying" ? (
+                      <Loader2 className="h-4 w-4 animate-spin" />
+                    ) : allThemesState === "copied" ? (
+                      <Check className="h-4 w-4" />
+                    ) : allThemesState === "error" ? (
+                      <AlertCircle className="h-4 w-4" />
+                    ) : (
+                      <Copy className="h-4 w-4" />
+                    )}
+                    {copyLabel(allThemesState)}
+                  </Button>
+                  <Button
+                    variant="secondary"
+                    size="sm"
+                    onClick={() => handleDownload(allThemesExport)}
+                  >
+                    <Download className="h-4 w-4 mr-1" />
+                    Download All
+                  </Button>
+                </div>
+              </div>
+            </div>
+          </div>
         )}
       </CardContent>
     </Card>
   );
+}
+
+// Helper functions
+function generateThemeCSS(themeId: string, tokens: Record<string, string>): string {
+  const cssVars = Object.entries(tokens)
+    .filter(([key]) => key !== "--app-surface-tint")
+    .map(([key, value]) => `  ${key}: ${value};`)
+    .join("\n");
+
+  return `.${themeId} {
+${cssVars}
+  --app-surface-tint: ${tokens["--app-surface-tint"] ?? "transparent"};
+  --app-gradient:
+    radial-gradient(1050px 560px at -10% -20%, hsl(var(--primary) / 0.3), transparent 60%),
+    radial-gradient(920px 520px at 112% 2%, hsl(var(--accent) / 0.22), transparent 58%),
+    linear-gradient(160deg, hsl(var(--background)) 0%, hsl(var(--background)) 50%, hsl(var(--background)) 100%);
+}`;
+}
+
+function generateThemeContextCode(themeId: string, colorMode: string): string {
+  return `"use client";
+
+import { createContext, useContext, useState } from "react";
+import { applyTheme } from "@/components/theme/theme-engine";
+
+const ThemeContext = createContext(null);
+
+export function ThemeProvider({ 
+  children, 
+  defaultTheme = "${themeId}",
+  defaultColorMode = "${colorMode}"
+}: { 
+  children: React.ReactNode;
+  defaultTheme?: string;
+  defaultColorMode?: "dark" | "light";
+}) {
+  const [themeId, setThemeId] = useState(defaultTheme);
+  const [colorMode, setColorMode] = useState<"dark" | "light">(defaultColorMode);
+
+  const updateTheme = (nextTheme: string) => {
+    setThemeId(nextTheme);
+    applyTheme(nextTheme, colorMode);
+  };
+
+  const updateMode = (nextMode: "dark" | "light") => {
+    setColorMode(nextMode);
+    applyTheme(themeId, nextMode);
+  };
+
+  return (
+    <ThemeContext.Provider value={{ themeId, colorMode, setThemeId: updateTheme, setColorMode: updateMode }}>
+      {children}
+    </ThemeContext.Provider>
+  );
+}
+
+export const useThemeContext = () => {
+  const context = useContext(ThemeContext);
+  if (!context) throw new Error("useThemeContext must be used within ThemeProvider");
+  return context;
+};`;
 }
