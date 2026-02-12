@@ -1,6 +1,13 @@
-# Shadcn Gradient Forge
+<p align="center">
+  <img src="https://capsule-render.vercel.app/api?type=waving&color=0:7C5CFF,100:2ED1C4&height=220&section=header&text=Gradient%20Forge&fontSize=48&fontAlignY=38&desc=Custom%20Shadcn%20Theming%20System&descAlignY=62" alt="Gradient Forge" />
+</p>
 
-Custom shadcn theming studio with Nitro-inspired gradient palettes, surface-aware layers, and export-ready tokens. Built as a portfolio-grade repo to showcase production UI polish and a reusable theme engine.
+<div align="center">
+  <strong>Gradient Forge</strong>
+  <div>Production-ready theming system with Nitro-inspired gradients, surface-aware layers, and export-ready tokens.</div>
+</div>
+
+---
 
 ## Highlights
 
@@ -12,7 +19,7 @@ Custom shadcn theming studio with Nitro-inspired gradient palettes, surface-awar
 
 ## Demo
 
-The landing page is the demo. Open the app and explore the studio, gallery, and export panel.
+The landing page is the demo. Open the app and explore the studio, gallery, and documentation.
 
 ## Quick Start
 
@@ -30,12 +37,47 @@ npm run dev
 
 ## Architecture
 
-- `app/page.tsx` - Studio layout, gallery, tokens, and export experience.
+- `app/page.tsx` - Home experience and component previews.
+- `app/studio/page.tsx` - Interactive theme studio.
+- `app/gallery/page.tsx` - Gradient gallery.
+- `app/docs/page.tsx` - Installation and CLI documentation.
 - `app/globals.css` - Gradient tokens, theme classes, and surface overlays.
 - `components/theme/theme-engine.ts` - Theme catalog + persistence helpers.
 - `components/theme/theme-context.tsx` - Client state + unlock logic.
 - `components/theme/theme-panel.tsx` - UI for theme selection and mode toggle.
 - `components/theme/theme-exporter.tsx` - Copy-ready export blocks.
+
+## CLI
+
+Published CLI (recommended):
+
+```bash
+npx gradient-forge@latest init --inject
+```
+
+Local repo CLI (works before publishing to npm):
+
+```bash
+node ./cli/index.mjs init --inject
+```
+
+CLI options:
+
+- `--inject` adds the theme CSS to `app/globals.css` automatically.
+- `--path` targets a custom project root.
+- `--force` overwrites existing generated files.
+
+What it generates:
+
+- `gradient-forge/theme-engine.ts`
+- `gradient-forge/theme-context.tsx`
+- `gradient-forge/themes.css`
+
+Integration steps:
+
+1. Import the CSS file in your global stylesheet.
+2. Wrap your app with `ThemeProvider`.
+3. Add theme classes to your root element.
 
 ## Add A New Theme
 
@@ -57,39 +99,6 @@ Open the Export section in the app to copy snippets for:
 - `npm run build` - Build for production.
 - `npm run start` - Run the production build.
 - `npm run lint` - Lint the codebase.
-
-## CLI
-
-The CLI scaffolds the theming system into another project.
-
-```bash
-node ./cli/index.mjs init --path /path/to/project
-```
-
-Optional flags:
-
-- `--inject` - Append theme CSS into `app/globals.css` if it exists.
-- `--force` - Overwrite existing generated files.
-
-What it generates:
-
-- `shadcn-gradient/theme-engine.ts`
-- `shadcn-gradient/theme-context.tsx`
-- `shadcn-gradient/themes.css`
-
-Integration steps:
-
-1. Import the CSS file in your global stylesheet.
-2. Wrap your app with `ThemeProvider`.
-3. Add theme classes to your root element.
-
-## Portfolio Notes
-
-This repo is designed to read well for recruiters:
-
-- Clear theming architecture
-- A visual demo with multiple UI surfaces
-- Copy-ready snippets to prove reusability
 
 ## License
 

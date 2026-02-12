@@ -161,7 +161,7 @@ export default function HomePage() {
                 More shadcn-style components to show how the theme behaves across surfaces.
               </p>
             </CardHeader>
-            <CardContent className="grid gap-4 md:grid-cols-2">
+            <CardContent className="grid grid-cols-1 gap-4 xl:grid-cols-2">
               <Card className="border-border/40 bg-card/70">
                 <CardHeader className="pb-2">
                   <CardTitle className="text-base">Pricing Tier</CardTitle>
@@ -186,11 +186,11 @@ export default function HomePage() {
                   </Button>
                 </CardContent>
               </Card>
-              <Card className="border-border/40 bg-card/70 md:col-span-2">
+              <Card className="border-border/40 bg-card/70 xl:col-span-2">
                 <CardHeader className="pb-2">
                   <CardTitle className="text-base">Status Panel</CardTitle>
                 </CardHeader>
-                <CardContent className="grid gap-3 md:grid-cols-3">
+                <CardContent className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-3">
                   <div className="rounded-2xl border border-border/40 bg-background/50 p-3">
                     <p className="text-xs text-muted-foreground">Active Themes</p>
                     <p className="text-lg font-semibold">23</p>
@@ -202,6 +202,41 @@ export default function HomePage() {
                   <div className="rounded-2xl border border-border/40 bg-background/50 p-3">
                     <p className="text-xs text-muted-foreground">Export Targets</p>
                     <p className="text-lg font-semibold">4</p>
+                  </div>
+                </CardContent>
+              </Card>
+              <Card className="border-border/40 bg-card/70">
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-base">Activity Feed</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-3 text-xs text-muted-foreground">
+                  <div className="rounded-xl border border-border/40 bg-background/50 p-3">
+                    New theme applied: Midnight Blurple
+                  </div>
+                  <div className="rounded-xl border border-border/40 bg-background/50 p-3">
+                    Surface tint optimized for cards
+                  </div>
+                  <div className="rounded-xl border border-border/40 bg-background/50 p-3">
+                    Exported Tailwind aliases
+                  </div>
+                </CardContent>
+              </Card>
+              <Card className="border-border/40 bg-card/70">
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-base">Launch Checklist</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-3 text-xs text-muted-foreground">
+                  <div className="flex items-center justify-between rounded-xl border border-border/40 bg-background/50 p-3">
+                    <span>Theme synced</span>
+                    <Badge variant="glass">Done</Badge>
+                  </div>
+                  <div className="flex items-center justify-between rounded-xl border border-border/40 bg-background/50 p-3">
+                    <span>Tokens mapped</span>
+                    <Badge variant="glass">Done</Badge>
+                  </div>
+                  <div className="flex items-center justify-between rounded-xl border border-border/40 bg-background/50 p-3">
+                    <span>Export ready</span>
+                    <Badge variant="outline">Pending</Badge>
                   </div>
                 </CardContent>
               </Card>

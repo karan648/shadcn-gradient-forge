@@ -24,16 +24,17 @@ const log = (message) => process.stdout.write(`${message}\n`);
 const logError = (message) => process.stderr.write(`${message}\n`);
 
 const usage = () => {
-  log("shadcn-gradient CLI");
+  log("gradient-forge CLI");
   log("");
   log("Usage:");
-  log("  shadcn-gradient init --path <project-root> [--inject] [--force]");
-  log("  shadcn-gradient help");
+  log("  gradient-forge init --path <project-root> [--inject] [--force] [--yes]");
+  log("  gradient-forge help");
   log("");
   log("Options:");
   log("  --path   Target project root (default: current directory)");
   log("  --inject Append theme CSS to app/globals.css if it exists");
   log("  --force  Overwrite existing generated files");
+  log("  --yes    Skip prompts and use defaults");
 };
 
 const ensureDir = (dir) => {
@@ -54,9 +55,9 @@ const copyTemplate = (name, dest, force) => {
 
 const appendThemeCss = (globalsPath, force) => {
   const themeCssPath = path.join(templateDir, "themes.css");
-  const marker = "/* shadcn-gradient theme start */";
+  const marker = "/* gradient-forge theme start */";
   const content = fs.readFileSync(themeCssPath, "utf8");
-  const wrapped = `${marker}\n${content}\n/* shadcn-gradient theme end */\n`;
+  const wrapped = `${marker}\n${content}\n/* gradient-forge theme end */\n`;
 
   if (!fs.existsSync(globalsPath)) {
     return { appended: false, reason: "missing" };
@@ -71,12 +72,110 @@ const appendThemeCss = (globalsPath, force) => {
   return { appended: true };
 };
 
-const init = () => {
+const themes = [
+  { id: "theme-nitro-mint-apple", label: "Mint Apple" },
+  { id: "theme-nitro-citrus-sherbert", label: "Citrus Sherbert" },
+  { id: "theme-nitro-retro-raincloud", label: "Retro Raincloud" },
+  { id: "theme-nitro-hanami", label: "Hanami" },
+  { id: "theme-nitro-sunrise", label: "Sunrise" },
+  { id: "theme-nitro-cotton-candy", label: "Cotton Candy" },
+  { id: "theme-nitro-lofi-vibes", label: "Lofi Vibes" },
+  { id: "theme-nitro-desert-khaki", label: "Desert Khaki" },
+  { id: "theme-nitro-sunset", label: "Sunset" },
+  { id: "theme-nitro-chroma-glow", label: "Chroma Glow" },
+  { id: "theme-nitro-forest", label: "Forest" },
+  { id: "theme-nitro-crimson", label: "Crimson" },
+  { id: "theme-nitro-midnight-blurple", label: "Midnight Blurple" },
+  { id: "theme-nitro-mars", label: "Mars" },
+  { id: "theme-nitro-dusk", label: "Dusk" },
+  { id: "theme-nitro-under-the-sea", label: "Under The Sea" },
+  { id: "theme-nitro-retro-storm", label: "Retro Storm" },
+  { id: "theme-nitro-neon-nights", label: "Neon Nights" },
+  { id: "theme-nitro-strawberry-lemonade", label: "Strawberry Lemonade" },
+  { id: "theme-nitro-aurora", label: "Aurora" },
+  { id: "theme-nitro-sepia", label: "Sepia" },
+];
+
+const DEFAULT_THEME = "theme-nitro-midnight-blurple";
+const DEFAULT_MODE = "dark";
+
+const promptSelect = async (title, items, defaultIndex = 0) => {
+  return new Promise((resolve) => {
+    if (!process.stdin.isTTY) {
+      resolve(items[defaultIndex]);
+      return;
+    }
+
+    let index = defaultIndex;
+
+    const render = () => {
+      process.stdout.write("\x1b[2J\x1b[0f");
+      log(title);
+      log("");
+      items.forEach((item, i) => {
+        const prefix = i === index ? "> " : "  ";
+        log(`${prefix}${item.label ?? item}`);
+      });
+      log("");
+      log("Use up/down arrows and press Enter.");
+    };
+
+    const onKey = (data) => {
+      const key = data.toString();
+      if (key === "\u0003") {
+        process.stdin.setRawMode(false);
+        process.stdin.pause();
+        process.exit(1);
+      }
+      if (key === "\r") {
+        process.stdin.setRawMode(false);
+        process.stdin.pause();
+        process.stdin.removeListener("data", onKey);
+        resolve(items[index]);
+        return;
+      }
+      if (key === "\u001b[A") {
+        index = (index - 1 + items.length) % items.length;
+        render();
+      }
+      if (key === "\u001b[B") {
+        index = (index + 1) % items.length;
+        render();
+      }
+    };
+
+    process.stdin.setRawMode(true);
+    process.stdin.resume();
+    process.stdin.on("data", onKey);
+    render();
+  });
+};
+
+const promptYesNo = async (title, defaultYes = true) => {
+  const items = defaultYes ? ["Yes", "No"] : ["No", "Yes"];
+  const choice = await promptSelect(title, items, 0);
+  return choice === "Yes";
+};
+
+const init = async () => {
   const targetRoot = path.resolve(readArg("--path", process.cwd()));
   const force = hasFlag("--force");
-  const inject = hasFlag("--inject");
+  const yes = hasFlag("--yes");
 
-  const themeDir = path.join(targetRoot, "shadcn-gradient");
+  log("");
+  log("Welcome to Gradient Forge.");
+  log("Let's scaffold the theming system into your project.");
+  log("");
+
+  const themeChoice = yes
+    ? themes.find((theme) => theme.id === DEFAULT_THEME) ?? themes[0]
+    : await promptSelect("Pick a default theme", themes, themes.findIndex((t) => t.id === DEFAULT_THEME));
+  const modeChoice = yes
+    ? DEFAULT_MODE
+    : await promptSelect("Pick a default color mode", ["dark", "light"], DEFAULT_MODE === "dark" ? 0 : 1);
+  const inject = yes ? hasFlag("--inject") : await promptYesNo("Inject theme CSS into app/globals.css?", true);
+
+  const themeDir = path.join(targetRoot, "gradient-forge");
   ensureDir(themeDir);
 
   const results = [];
@@ -84,6 +183,7 @@ const init = () => {
   results.push(copyTemplate("theme-context.tsx", path.join(themeDir, "theme-context.tsx"), force));
   results.push(copyTemplate("themes.css", path.join(themeDir, "themes.css"), force));
 
+  log("");
   log("Created theme assets:");
   results.forEach((item) => {
     const status = item.skipped ? "skipped" : "written";
@@ -105,10 +205,13 @@ const init = () => {
   log("");
   log("Next steps:");
   log("1. Import the CSS file in your global stylesheet:");
-  log("   @import \"./shadcn-gradient/themes.css\";");
-  log("2. Wrap your app with ThemeProvider from shadcn-gradient/theme-context.");
+  log("   @import \"./gradient-forge/themes.css\";");
+  log("2. Wrap your app with ThemeProvider from gradient-forge/theme-context.");
   log("3. Add theme classes to your root element:");
-  log("   class=\"dark theme-nitro-midnight-blurple\"");
+  log(`   class="${modeChoice} ${themeChoice.id}"`);
+  log(`   data-theme="${themeChoice.id}" data-color-mode="${modeChoice}"`);
+  log("");
+  log("All set. Run your app and start styling.");
 };
 
 switch (command) {

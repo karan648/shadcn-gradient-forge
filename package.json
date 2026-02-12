@@ -1,9 +1,9 @@
 {
-  "name": "shadcn-gradient-forge",
+  "name": "gradient-forge",
   "version": "0.1.0",
   "private": true,
   "bin": {
-    "shadcn-gradient": "./cli/index.mjs"
+    "gradient-forge": "./cli/index.mjs"
   },
   "scripts": {
     "dev": "next dev --turbopack",
