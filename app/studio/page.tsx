@@ -1,4 +1,5 @@
 import { ThemePanel } from "@/components/theme/theme-panel";
+import { StudioCodePanel } from "@/components/theme/studio-code-panel";
 import { SiteHeader } from "@/components/site/site-header";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -112,21 +113,7 @@ export default function StudioPage() {
                       ))}
                     </div>
                   </div>
-                  <div className="rounded-2xl border border-border/40 bg-background/50 p-5">
-                    <h3 className="text-lg font-semibold">Token Export</h3>
-                    <p className="mt-2 text-sm text-muted-foreground">
-                      Use data-theme attributes to sync gradient styles across your own shadcn component library.
-                      Every background and surface layer is already mapped for you.
-                    </p>
-                    <div className="mt-4 flex flex-wrap gap-2">
-                      <Button variant="outline" size="sm" asChild>
-                        <a href="/docs">Copy CSS</a>
-                      </Button>
-                      <Button variant="ghost" size="sm" asChild>
-                        <a href="/docs">Read Docs</a>
-                      </Button>
-                    </div>
-                  </div>
+                  <StudioCodePanel />
                 </div>
               </CardContent>
             </Card>

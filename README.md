@@ -2,6 +2,12 @@
   <img src="https://capsule-render.vercel.app/api?type=waving&color=0:7C5CFF,100:2ED1C4&height=220&section=header&text=Gradient%20Forge&fontSize=48&fontAlignY=38&desc=Custom%20Shadcn%20Theming%20System&descAlignY=62" alt="Gradient Forge" />
 </p>
 
+<p align="center">
+  <a href="https://buymeacoffee.com/your-username">
+    <img src="https://img.shields.io/badge/Buy%20Me%20a%20Coffee-Support-orange?style=for-the-badge&logo=buymeacoffee&logoColor=white" alt="Buy Me a Coffee" />
+  </a>
+</p>
+
 <div align="center">
   <strong>Gradient Forge</strong>
   <div>Production-ready theming system with Nitro-inspired gradients, surface-aware layers, and export-ready tokens.</div>
@@ -19,7 +25,13 @@
 
 ## Demo
 
-The landing page is the demo. Open the app and explore the studio, gallery, and documentation.
+The app is fully multi-page. Explore:
+
+- `/` Home
+- `/studio` Interactive theme studio
+- `/gallery` Theme gallery
+- `/library` Premium component library
+- `/docs` Installation and CLI documentation
 
 ## Quick Start
 
@@ -40,6 +52,7 @@ npm run dev
 - `app/page.tsx` - Home experience and component previews.
 - `app/studio/page.tsx` - Interactive theme studio.
 - `app/gallery/page.tsx` - Gradient gallery.
+- `app/library/page.tsx` - Premium component previews + copyable source code.
 - `app/docs/page.tsx` - Installation and CLI documentation.
 - `app/globals.css` - Gradient tokens, theme classes, and surface overlays.
 - `components/theme/theme-engine.ts` - Theme catalog + persistence helpers.
@@ -64,8 +77,11 @@ node ./cli/index.mjs init --inject
 CLI options:
 
 - `--inject` adds the theme CSS to `app/globals.css` automatically.
+- `--no-inject` skips modifying `app/globals.css`.
 - `--path` targets a custom project root.
 - `--force` overwrites existing generated files.
+- `--yes` skips prompts and applies defaults.
+- `--tui` enables arrow-key selector mode.
 
 What it generates:
 
@@ -99,6 +115,12 @@ Open the Export section in the app to copy snippets for:
 - `npm run build` - Build for production.
 - `npm run start` - Run the production build.
 - `npm run lint` - Lint the codebase.
+
+## Support
+
+If Gradient Forge helps your project, you can support development here:
+
+- `https://buymeacoffee.com/your-username`
 
 ## License
 

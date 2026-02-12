@@ -6,12 +6,6 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ArrowRight } from "lucide-react";
 import { featureCards, roadmapItems, useCases, workflowSteps } from "@/components/site/site-data";
 
-const statCards = [
-  { label: "Gradient Tokens", value: "22" },
-  { label: "Surface Layers", value: "5" },
-  { label: "Component States", value: "14" },
-];
-
 export default function HomePage() {
   return (
     <main className="min-h-screen px-6 pb-20 pt-12 lg:px-12">
@@ -35,12 +29,42 @@ export default function HomePage() {
                   Launch Studio <ArrowRight className="h-4 w-4" />
                 </a>
               </Button>
+              <Button variant="secondary" size="lg" asChild>
+                <a href="/library">Component Library</a>
+              </Button>
               <Button variant="outline" size="lg" asChild>
                 <a href="/docs">Read Docs</a>
               </Button>
             </div>
           </div>
-          <div className="relative min-h-[540px] w-full overflow-hidden">
+          <div className="grid gap-4 lg:hidden">
+            <Card className="border-border/40 bg-card/70">
+              <CardHeader className="pb-2">
+                <CardTitle className="text-base">Pricing Tier</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-2">
+                <p className="text-xs text-muted-foreground">Launch-ready plan for teams.</p>
+                <p className="text-2xl font-semibold">$29</p>
+                <Button className="w-full">Start free trial</Button>
+              </CardContent>
+            </Card>
+            <Card className="border-border/40 bg-card/70">
+              <CardHeader className="pb-2">
+                <CardTitle className="text-base">Inline Alert</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-2">
+                <p className="text-xs text-muted-foreground">
+                  Gradient tokens keep alerts readable across themes.
+                </p>
+                <Badge variant="outline">System Update</Badge>
+                <Button variant="secondary" className="w-full">
+                  Review changes
+                </Button>
+              </CardContent>
+            </Card>
+          </div>
+
+          <div className="relative hidden min-h-[580px] w-full overflow-hidden lg:block">
             <div className="absolute inset-0 rounded-3xl border border-border/40 bg-background/40 shadow-[0_0_80px_hsl(var(--primary)_/_0.15)]" />
 
             <div className="pointer-events-none absolute left-0 top-6 w-[52%] animate-float-slow">
@@ -73,7 +97,7 @@ export default function HomePage() {
               </Card>
             </div>
 
-            <div className="pointer-events-none absolute left-6 top-[240px] w-[56%] animate-float">
+            <div className="pointer-events-none absolute left-6 top-[260px] w-[56%] animate-float">
               <Card className="border-border/40 bg-card/70">
                 <CardHeader className="pb-2">
                   <CardTitle className="text-base">Status Panel</CardTitle>
@@ -95,7 +119,7 @@ export default function HomePage() {
               </Card>
             </div>
 
-            <div className="pointer-events-none absolute right-2 top-[330px] w-[44%] animate-float-slow">
+            <div className="pointer-events-none absolute right-2 top-[350px] w-[44%] animate-float-slow">
               <Card className="border-border/40 bg-card/70">
                 <CardHeader className="pb-2">
                   <CardTitle className="text-base">Launch Checklist</CardTitle>
@@ -204,6 +228,9 @@ export default function HomePage() {
               <div className="flex flex-wrap gap-3">
                 <Button variant="glow" asChild>
                   <a href="/studio">Open Studio</a>
+                </Button>
+                <Button variant="secondary" asChild>
+                  <a href="/library">Browse Components</a>
                 </Button>
                 <Button variant="outline" asChild>
                   <a href="/gallery">Theme Gallery</a>

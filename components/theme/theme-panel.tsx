@@ -23,7 +23,7 @@ export function ThemePanel() {
   const isLight = colorMode === "light";
   const totalThemes = NITRO_PUBLIC_THEMES.length;
   const seenThemes = totalThemes - remainingForUnlock;
-  const progress = totalThemes === 0 ? 0 : Math.round((seenThemes / totalThemes) * 100);
+  const progress = Math.round((seenThemes / totalThemes) * 100);
 
   return (
     <Card className="border-border/50 bg-background/60">

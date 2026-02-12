@@ -12,6 +12,7 @@ import {
   getStoredColorMode,
   getStoredTheme,
   persistTourProgress,
+  publicThemeIdSet,
   publicThemeIds,
   readTourProgress,
 } from "./theme-engine";
@@ -53,7 +54,7 @@ export const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
   }, [themeId, colorMode]);
 
   const setThemeId = (nextTheme: ThemeId) => {
-    const isPublic = publicThemeIds.includes(nextTheme);
+    const isPublic = publicThemeIdSet.has(nextTheme);
     const nextViewedThemeIds = isPublic
       ? Array.from(new Set([...viewedThemeIds, nextTheme]))
       : viewedThemeIds;

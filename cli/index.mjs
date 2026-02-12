@@ -28,12 +28,13 @@ const usage = () => {
   log("gradient-forge CLI");
   log("");
   log("Usage:");
-  log("  gradient-forge init --path <project-root> [--inject] [--force] [--yes] [--tui]");
+  log("  gradient-forge init --path <project-root> [--inject|--no-inject] [--force] [--yes] [--tui]");
   log("  gradient-forge help");
   log("");
   log("Options:");
   log("  --path   Target project root (default: current directory)");
   log("  --inject Append theme CSS to app/globals.css if it exists");
+  log("  --no-inject Skip css injection");
   log("  --force  Overwrite existing generated files");
   log("  --yes    Skip prompts and use defaults");
   log("  --tui    Enable arrow-key selector (disables normal scroll)");
@@ -197,6 +198,8 @@ const init = async () => {
   const force = hasFlag("--force");
   const yes = hasFlag("--yes");
   const tui = hasFlag("--tui");
+  const explicitInject = hasFlag("--inject");
+  const noInject = hasFlag("--no-inject");
 
   log("");
   log("Gradient Forge");
@@ -211,7 +214,13 @@ const init = async () => {
   const modeChoice = yes
     ? DEFAULT_MODE
     : await select("Pick a default color mode", ["dark", "light"], DEFAULT_MODE === "dark" ? 0 : 1);
-  const inject = yes ? hasFlag("--inject") : await promptYesNo("Inject theme CSS into app/globals.css?", true);
+
+  let inject = explicitInject;
+  if (noInject) {
+    inject = false;
+  } else if (!explicitInject) {
+    inject = yes ? true : await promptYesNo("Inject theme CSS into app/globals.css?", true);
+  }
 
   const themeDir = path.join(targetRoot, "gradient-forge");
   ensureDir(themeDir);
@@ -254,7 +263,10 @@ const init = async () => {
 
 switch (command) {
   case "init":
-    init();
+    init().catch((error) => {
+      logError(`Error: ${error instanceof Error ? error.message : String(error)}`);
+      process.exit(1);
+    });
     break;
   case "help":
   case "--help":

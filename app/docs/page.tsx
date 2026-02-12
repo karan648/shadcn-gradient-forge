@@ -13,8 +13,11 @@ const cliSteps = [
 const cliCommands = [
   { title: "Init", command: "npx gradient-forge@latest init" },
   { title: "Init with inject", command: "npx gradient-forge@latest init --inject" },
+  { title: "Init without inject", command: "npx gradient-forge@latest init --no-inject" },
   { title: "Init with custom path", command: "npx gradient-forge@latest init --path ./apps/web" },
   { title: "Force overwrite", command: "npx gradient-forge@latest init --force" },
+  { title: "Skip prompts", command: "npx gradient-forge@latest init --yes" },
+  { title: "Arrow-key TUI", command: "npx gradient-forge@latest init --tui" },
   { title: "Help", command: "npx gradient-forge@latest help" },
 ];
 
@@ -46,7 +49,7 @@ export default function DocsPage() {
 
         <div className="flex flex-col gap-3">
           <Badge variant="glass">Documentation</Badge>
-          <h1 className="text-3xl font-semibold">Install the Shadcn Gradient System</h1>
+          <h1 className="text-3xl font-semibold">Install the Gradient Forge System</h1>
           <p className="max-w-2xl text-sm text-muted-foreground">
             Use the CLI for the fastest setup or follow the manual path if you want total control.
           </p>
@@ -196,11 +199,20 @@ export default function RootLayout({ children }) {
                 app/globals.css automatically.
               </div>
               <div className="rounded-2xl border border-border/40 bg-background/50 p-3">
+                <span className="font-semibold text-foreground">--no-inject</span> keeps globals.css unchanged.
+              </div>
+              <div className="rounded-2xl border border-border/40 bg-background/50 p-3">
                 <span className="font-semibold text-foreground">--path</span> targets a custom project root.
               </div>
               <div className="rounded-2xl border border-border/40 bg-background/50 p-3">
                 <span className="font-semibold text-foreground">--force</span> overwrites existing generated
                 files.
+              </div>
+              <div className="rounded-2xl border border-border/40 bg-background/50 p-3">
+                <span className="font-semibold text-foreground">--yes</span> skips prompts and applies defaults.
+              </div>
+              <div className="rounded-2xl border border-border/40 bg-background/50 p-3">
+                <span className="font-semibold text-foreground">--tui</span> enables arrow-key selector mode.
               </div>
             </CardContent>
           </Card>

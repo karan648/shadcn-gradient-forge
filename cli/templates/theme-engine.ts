@@ -234,3 +234,4 @@ export const applyTheme = (theme?: string | null, mode?: ColorMode) => {
 export const defaultTheme = DEFAULT_THEME;
 export const defaultColorMode = DEFAULT_COLOR_MODE;
 export const publicThemeIds = NITRO_PUBLIC_THEMES.map((theme) => theme.id);
+export const publicThemeIdSet = new Set<string>(publicThemeIds);

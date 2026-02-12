@@ -8,13 +8,15 @@ export default function LibraryPage() {
       <section className="mx-auto flex w-full max-w-6xl flex-col gap-12">
         <SiteHeader />
 
-        <div className="flex flex-col gap-3">
-          <Badge variant="glass">Component Library</Badge>
-          <h1 className="text-3xl font-semibold">Premium Shadcn Components</h1>
-          <p className="max-w-2xl text-sm text-muted-foreground">
-            Each component ships with a live preview and copy-ready source code. Switch tabs to preview or copy
-            the full file instantly.
-          </p>
+        <div className="rounded-3xl border border-border/40 bg-background/50 p-6 shadow-[0_0_80px_hsl(var(--primary)_/_0.12)]">
+          <div className="flex flex-col gap-3">
+            <Badge variant="glass">Component Library</Badge>
+            <h1 className="text-3xl font-semibold">Premium Shadcn Components</h1>
+            <p className="max-w-3xl text-sm text-muted-foreground">
+              High-quality component packs with live preview, full source files, and one-click copy for rapid
+              integration into your own theme system.
+            </p>
+          </div>
         </div>
 
         <ComponentShowcase />
