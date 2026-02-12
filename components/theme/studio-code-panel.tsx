@@ -179,7 +179,7 @@ export function StudioCodePanel() {
   return (
     <Card className="border-border/50 bg-background/60">
       <CardHeader className="space-y-4">
-        <div className="flex items-center justify-between gap-3">
+        <div className="flex flex-wrap items-start justify-between gap-3">
           <div>
             <CardTitle>Token Export</CardTitle>
             <p className="mt-1 text-sm text-muted-foreground">
@@ -190,7 +190,7 @@ export function StudioCodePanel() {
             <FileCode2 className="h-3 w-3" /> Dev Ready
           </Badge>
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2">
           <Button
             variant={tab === "preview" ? "default" : "ghost"}
             size="sm"
@@ -270,7 +270,7 @@ export function StudioCodePanel() {
             <div className="rounded-2xl border border-border/40 bg-background/50 p-4">
               <div className="flex flex-wrap items-center justify-between gap-3">
                 <div>
-                  <p className="text-sm font-semibold">{activeSnippet.path}</p>
+                  <p className="break-all text-sm font-semibold">{activeSnippet.path}</p>
                   <p className="text-xs text-muted-foreground">{activeSnippet.description}</p>
                 </div>
                 <Button

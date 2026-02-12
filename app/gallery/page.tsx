@@ -7,13 +7,13 @@ const galleryThemes = [...NITRO_PUBLIC_THEMES, MEMORY_LANE_THEME];
 
 export default function GalleryPage() {
   return (
-    <main className="min-h-screen px-6 pb-20 pt-12 lg:px-12">
+    <main className="min-h-screen px-4 pb-20 pt-12 sm:px-6 lg:px-12">
       <section className="mx-auto flex w-full max-w-6xl flex-col gap-12">
         <SiteHeader />
 
         <div className="flex flex-col gap-3">
           <Badge variant="glass">Gallery</Badge>
-          <h1 className="text-3xl font-semibold">Theme Gallery</h1>
+          <h1 className="text-2xl font-semibold sm:text-3xl">Theme Gallery</h1>
           <p className="max-w-2xl text-sm text-muted-foreground">
             Preview every gradient preset with consistent shadcn surfaces. Use these palettes as-is or remix them
             to match your brand.
@@ -35,9 +35,9 @@ export default function GalleryPage() {
               <Card key={theme.id} className="overflow-hidden border-border/50 bg-background/60">
                 <div className="h-28" style={{ backgroundImage: theme.preview }} />
                 <CardContent className="flex items-center justify-between gap-3 py-4">
-                  <div>
+                  <div className="min-w-0">
                     <p className="text-sm font-semibold">{theme.label}</p>
-                    <p className="text-xs text-muted-foreground">{theme.id}</p>
+                    <p className="truncate text-xs text-muted-foreground">{theme.id}</p>
                   </div>
                   {theme.id === MEMORY_LANE_THEME.id ? (
                     <Badge variant="outline">Secret</Badge>

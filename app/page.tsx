@@ -8,14 +8,14 @@ import { featureCards, roadmapItems, useCases, workflowSteps } from "@/component
 
 export default function HomePage() {
   return (
-    <main className="min-h-screen px-6 pb-20 pt-12 lg:px-12">
+    <main className="min-h-screen px-4 pb-20 pt-12 sm:px-6 lg:px-12">
       <section className="mx-auto flex w-full max-w-6xl flex-col gap-12">
         <SiteHeader />
 
         <div className="grid gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:items-center">
           <div className="space-y-5">
             <Badge variant="glass">Nitro Gradient Forge</Badge>
-            <h1 className="max-w-2xl text-4xl font-semibold tracking-tight md:text-5xl">
+            <h1 className="max-w-2xl text-3xl font-semibold tracking-tight sm:text-4xl md:text-5xl">
               Build shadcn components that glow with cinematic gradients.
             </h1>
             <p className="max-w-xl text-base text-muted-foreground">
@@ -237,6 +237,65 @@ export default function HomePage() {
                 </Button>
                 <Button variant="ghost" asChild>
                   <a href="/docs">Read Docs</a>
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        </section>
+
+        <section id="coming-soon-cli" className="grid gap-6 lg:grid-cols-[1.05fr_1fr]">
+          <Card className="border-border/50 bg-background/60">
+            <CardHeader>
+              <div className="flex flex-wrap items-center gap-2">
+                <CardTitle>Coming Soon CLI</CardTitle>
+                <Badge variant="outline">In Progress</Badge>
+              </div>
+              <p className="text-sm text-muted-foreground">
+                A guided command-line installer is being finalized for faster setup in real projects.
+              </p>
+            </CardHeader>
+            <CardContent className="space-y-3 text-sm text-muted-foreground">
+              <div className="rounded-2xl border border-border/40 bg-background/50 p-3">
+                <code className="font-semibold text-foreground">init</code> scaffolds theme files and context in one
+                command.
+              </div>
+              <div className="rounded-2xl border border-border/40 bg-background/50 p-3">
+                <code className="font-semibold text-foreground">--inject</code> adds theme tokens to your global CSS
+                automatically.
+              </div>
+              <div className="rounded-2xl border border-border/40 bg-background/50 p-3">
+                <code className="font-semibold text-foreground">--path</code> targets monorepo apps and custom
+                project roots.
+              </div>
+              <pre className="overflow-x-auto rounded-2xl border border-border/40 bg-black/70 p-3 text-xs text-white/90">
+                <code>node ./cli/index.mjs init --inject</code>
+              </pre>
+            </CardContent>
+          </Card>
+
+          <Card className="border-border/50 bg-background/60">
+            <CardHeader>
+              <CardTitle>CLI Release Scope</CardTitle>
+              <p className="text-sm text-muted-foreground">
+                First release focuses on installation speed, safety checks, and repeatable exports.
+              </p>
+            </CardHeader>
+            <CardContent className="space-y-3 text-sm text-muted-foreground">
+              <div className="rounded-2xl border border-border/40 bg-background/50 p-3">
+                Interactive prompts with non-destructive defaults.
+              </div>
+              <div className="rounded-2xl border border-border/40 bg-background/50 p-3">
+                Overwrite protection plus a force mode for regeneration.
+              </div>
+              <div className="rounded-2xl border border-border/40 bg-background/50 p-3">
+                Copy-ready tokens aligned with shadcn conventions.
+              </div>
+              <div className="flex flex-wrap gap-3">
+                <Button variant="outline" asChild>
+                  <a href="/docs#coming-soon-cli">Track updates</a>
+                </Button>
+                <Button variant="ghost" asChild>
+                  <a href="/studio">Preview studio</a>
                 </Button>
               </div>
             </CardContent>

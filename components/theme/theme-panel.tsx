@@ -28,7 +28,7 @@ export function ThemePanel() {
   return (
     <Card className="border-border/50 bg-background/60">
       <CardHeader>
-        <div className="flex items-center justify-between gap-4">
+        <div className="flex flex-wrap items-center justify-between gap-3">
           <div>
             <CardTitle>Gradient Studio</CardTitle>
             <CardDescription>
@@ -39,14 +39,14 @@ export function ThemePanel() {
         </div>
       </CardHeader>
       <CardContent className="space-y-6">
-        <div className="flex items-center justify-between rounded-2xl border border-border/40 bg-background/50 px-4 py-3">
+        <div className="flex flex-col gap-3 rounded-2xl border border-border/40 bg-background/50 px-4 py-3 sm:flex-row sm:items-center sm:justify-between">
           <div className="space-y-1">
             <p className="text-sm font-semibold">Color Mode</p>
             <p className="text-xs text-muted-foreground">
               Switch between light and dark surfaces.
             </p>
           </div>
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-3 sm:justify-end">
             <Sun className={cn("h-4 w-4", isLight ? "text-foreground" : "text-muted-foreground")} />
             <Switch
               checked={!isLight}
@@ -58,7 +58,7 @@ export function ThemePanel() {
         </div>
 
         <div className="space-y-3 rounded-2xl border border-border/40 bg-background/50 px-4 py-3">
-          <div className="flex items-center justify-between">
+          <div className="flex flex-wrap items-center justify-between gap-3">
             <div>
               <p className="text-sm font-semibold">Secret Theme Unlock</p>
               <p className="text-xs text-muted-foreground">
@@ -84,7 +84,7 @@ export function ThemePanel() {
           </div>
         </div>
 
-        <div className="grid grid-cols-2 gap-4 lg:grid-cols-3">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {availableThemes.map((theme) => {
             const isActive = themeId === theme.id;
             const isSecret = theme.id === MEMORY_LANE_THEME.id;
@@ -120,8 +120,8 @@ export function ThemePanel() {
                     </div>
                   )}
                 </div>
-                <div className="flex items-center justify-between gap-2 px-3 py-3">
-                  <div>
+                <div className="flex flex-wrap items-center justify-between gap-2 px-3 py-3">
+                  <div className="min-w-0">
                     <p className="text-sm font-semibold">{theme.label}</p>
                     <p className="text-xs text-muted-foreground">
                       {isActive ? "Active" : "Preview"}

@@ -12,13 +12,13 @@ const navItems = ["Overview", "Tokens", "Components", "Gallery", "Export"];
 
 export default function StudioPage() {
   return (
-    <main className="min-h-screen px-6 pb-20 pt-12 lg:px-12">
+    <main className="min-h-screen px-4 pb-20 pt-12 sm:px-6 lg:px-12">
       <section className="mx-auto flex w-full max-w-6xl flex-col gap-12">
         <SiteHeader />
 
         <div className="flex flex-col gap-3">
           <Badge variant="glass">Studio</Badge>
-          <h1 className="text-3xl font-semibold">Theme Studio</h1>
+          <h1 className="text-2xl font-semibold sm:text-3xl">Theme Studio</h1>
           <p className="max-w-2xl text-sm text-muted-foreground">
             Preview every gradient, toggle light or dark mode, and validate how shadcn components react to the
             surface tint layer.
@@ -31,14 +31,14 @@ export default function StudioPage() {
           <div className="space-y-6">
             <Card className="border-border/50 bg-background/60">
               <CardHeader>
-                <div className="flex items-center justify-between">
+                <div className="flex flex-wrap items-start justify-between gap-3">
                   <div>
                     <CardTitle>Component Preview</CardTitle>
                     <p className="text-sm text-muted-foreground">
                       Shadcn-style elements reacting to gradients in real time.
                     </p>
                   </div>
-                  <Badge variant="default" className="gap-1">
+                  <Badge variant="default" className="shrink-0 gap-1">
                     <Sparkles className="h-3 w-3" /> Live
                   </Badge>
                 </div>
@@ -95,7 +95,7 @@ export default function StudioPage() {
                 <CardTitle>Sidebar Surface</CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="grid gap-4 lg:grid-cols-[200px_1fr]">
+                <div className="grid gap-4 md:grid-cols-[200px_minmax(0,1fr)]">
                   <div className="rounded-2xl bg-sidebar/70 p-4 shadow-inner">
                     <p className="text-xs font-semibold uppercase text-muted-foreground">
                       Navigation

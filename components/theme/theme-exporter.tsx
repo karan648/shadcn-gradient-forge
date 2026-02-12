@@ -64,7 +64,7 @@ export function ThemeExporter() {
   return (
     <Card className="border-border/50 bg-background/60">
       <CardHeader className="flex flex-col gap-2">
-        <div className="flex items-center justify-between">
+        <div className="flex flex-wrap items-center justify-between gap-2">
           <CardTitle>Theme Export</CardTitle>
           <Badge variant="glass">Copy Ready</Badge>
         </div>

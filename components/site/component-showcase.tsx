@@ -491,7 +491,7 @@ export function ComponentShowcase() {
   };
 
   return (
-    <section className="grid gap-6 xl:grid-cols-[300px_1fr]">
+    <section className="grid gap-6 xl:grid-cols-[280px_minmax(0,1fr)]">
       <Card className="border-border/50 bg-background/60">
         <CardHeader>
           <CardTitle>Component Packs</CardTitle>
@@ -546,7 +546,7 @@ export function ComponentShowcase() {
         </CardContent>
       </Card>
 
-      <Card className="border-border/50 bg-background/60">
+      <Card className="min-w-0 border-border/50 bg-background/60">
         <CardHeader className="space-y-3">
           <div className="flex flex-wrap items-center justify-between gap-3">
             <div>
@@ -578,7 +578,7 @@ export function ComponentShowcase() {
         </CardHeader>
         <CardContent>
           {activeTab === "preview" ? (
-            <div className="rounded-3xl border border-border/40 bg-background/50 p-6">
+            <div className="rounded-3xl border border-border/40 bg-background/50 p-4 sm:p-6">
               <div className="mx-auto max-w-2xl">{activeComponent.preview}</div>
             </div>
           ) : (
@@ -589,9 +589,11 @@ export function ComponentShowcase() {
                     key={file.path}
                     size="sm"
                     variant={index === activeFileIndex ? "default" : "ghost"}
+                    className="max-w-full truncate"
+                    title={file.path}
                     onClick={() => setActiveFileIndex(index)}
                   >
-                    {file.path}
+                    {file.path.split("/").pop() ?? file.path}
                   </Button>
                 ))}
                 <Button
@@ -609,7 +611,7 @@ export function ComponentShowcase() {
                   Copy all files
                 </Button>
               </div>
-              <pre className="max-h-[520px] overflow-auto rounded-2xl border border-border/40 bg-black/80 p-4 text-xs text-white/90">
+              <pre className="max-h-[520px] overflow-x-auto overflow-y-auto rounded-2xl border border-border/40 bg-black/80 p-4 text-xs text-white/90">
                 <code>{activeFile.code}</code>
               </pre>
             </div>

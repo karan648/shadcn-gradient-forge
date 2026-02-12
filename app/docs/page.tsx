@@ -43,17 +43,65 @@ const fileTree = [
 
 export default function DocsPage() {
   return (
-    <main className="min-h-screen px-6 pb-20 pt-12 lg:px-12">
+    <main className="min-h-screen px-4 pb-20 pt-12 sm:px-6 lg:px-12">
       <section className="mx-auto flex w-full max-w-6xl flex-col gap-12">
         <SiteHeader />
 
         <div className="flex flex-col gap-3">
           <Badge variant="glass">Documentation</Badge>
-          <h1 className="text-3xl font-semibold">Install the Gradient Forge System</h1>
+          <h1 className="text-2xl font-semibold sm:text-3xl">Install the Gradient Forge System</h1>
           <p className="max-w-2xl text-sm text-muted-foreground">
             Use the CLI for the fastest setup or follow the manual path if you want total control.
           </p>
         </div>
+
+        <section id="coming-soon-cli" className="grid gap-6 lg:grid-cols-[1.05fr_1fr]">
+          <Card className="border-border/50 bg-background/60">
+            <CardHeader>
+              <div className="flex flex-wrap items-center gap-2">
+                <CardTitle>Coming Soon CLI</CardTitle>
+                <Badge variant="outline">In Progress</Badge>
+              </div>
+              <p className="text-sm text-muted-foreground">
+                The public CLI package is being finalized. Local repo CLI works today while npm release is pending.
+              </p>
+            </CardHeader>
+            <CardContent className="space-y-3 text-sm text-muted-foreground">
+              <div className="rounded-2xl border border-border/40 bg-background/50 p-3">
+                Current local command:
+                <pre className="mt-2 overflow-x-auto text-xs text-foreground">
+                  <code>node ./cli/index.mjs init --inject</code>
+                </pre>
+              </div>
+              <div className="rounded-2xl border border-border/40 bg-background/50 p-3">
+                Planned package command:
+                <pre className="mt-2 overflow-x-auto text-xs text-foreground">
+                  <code>npx gradient-forge@latest init --inject</code>
+                </pre>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card className="border-border/50 bg-background/60">
+            <CardHeader>
+              <CardTitle>Release Checklist</CardTitle>
+              <p className="text-sm text-muted-foreground">
+                What is being completed before public publish.
+              </p>
+            </CardHeader>
+            <CardContent className="space-y-3 text-sm text-muted-foreground">
+              <div className="rounded-2xl border border-border/40 bg-background/50 p-3">
+                Validate inject/no-inject flows across clean Next.js projects.
+              </div>
+              <div className="rounded-2xl border border-border/40 bg-background/50 p-3">
+                Finalize overwrite safety checks and non-interactive defaults.
+              </div>
+              <div className="rounded-2xl border border-border/40 bg-background/50 p-3">
+                Publish package metadata and verify npx, pnpm, yarn, and bun runners.
+              </div>
+            </CardContent>
+          </Card>
+        </section>
 
         <section className="grid gap-6 lg:grid-cols-[1.05fr_1fr]">
           <Card className="border-border/50 bg-background/60">
@@ -68,13 +116,13 @@ export default function DocsPage() {
                 Use the published CLI for the best experience. This keeps your local project clean and works from
                 anywhere.
               </div>
-              <pre className="rounded-2xl border border-border/40 bg-black/70 p-4 text-xs text-white/90">
+              <pre className="overflow-x-auto rounded-2xl border border-border/40 bg-black/70 p-4 text-xs text-white/90">
                 <code>npx gradient-forge@latest init --inject</code>
               </pre>
               <div className="rounded-2xl border border-border/40 bg-background/50 p-3 text-xs text-muted-foreground">
                 If npm shows <span className="text-foreground">E404</span>, the package is not published yet.
                 Use local repo usage:
-                <span className="text-foreground"> node ./cli/index.mjs init --inject</span>
+                <span className="mt-1 block break-all text-foreground">node ./cli/index.mjs init --inject</span>
               </div>
               <div className="space-y-2 text-sm text-muted-foreground">
                 {cliSteps.map((step) => (
@@ -171,10 +219,10 @@ export default function DocsPage() {
               <p className="text-sm text-muted-foreground">Make sure the root element carries theme classes.</p>
             </CardHeader>
             <CardContent className="space-y-4">
-              <pre className="rounded-2xl border border-border/40 bg-black/70 p-4 text-xs text-white/90">
+              <pre className="overflow-x-auto rounded-2xl border border-border/40 bg-black/70 p-4 text-xs text-white/90">
                 <code>{`<html class="dark theme-nitro-midnight-blurple" data-theme="theme-nitro-midnight-blurple" data-color-mode="dark">`}</code>
               </pre>
-              <pre className="rounded-2xl border border-border/40 bg-black/70 p-4 text-xs text-white/90">
+              <pre className="overflow-x-auto rounded-2xl border border-border/40 bg-black/70 p-4 text-xs text-white/90">
                 <code>{`import { ThemeProvider } from "./gradient-forge/theme-context";
 
 export default function RootLayout({ children }) {
@@ -248,7 +296,7 @@ export default function RootLayout({ children }) {
               </p>
             </CardHeader>
             <CardContent>
-              <pre className="rounded-2xl border border-border/40 bg-black/70 p-4 text-xs text-white/90">
+              <pre className="overflow-x-auto rounded-2xl border border-border/40 bg-black/70 p-4 text-xs text-white/90">
                 <code>{`colors: {
   background: "hsl(var(--background))",
   foreground: "hsl(var(--foreground))",
