@@ -9,10 +9,10 @@ export function SiteHeader() {
       <div className="flex flex-wrap items-center justify-between gap-4 rounded-full border border-border/40 bg-background/50 px-4 py-3">
         <div className="flex items-center gap-3">
           <Badge variant="glass" className="gap-2">
-            <Wand2 className="h-3 w-3" /> Gradient System
+            <Wand2 className="h-3 w-3" /> Gradient Forge
           </Badge>
           <span className="text-xs text-muted-foreground">
-            Production-ready shadcn theming kit
+            Nitro-inspired theming studio
           </span>
         </div>
         <nav className="flex flex-wrap items-center gap-2">

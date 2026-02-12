@@ -2,6 +2,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import readline from "node:readline";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -107,9 +108,16 @@ const promptSelect = async (title, items, defaultIndex = 0) => {
     }
 
     let index = defaultIndex;
+    let isFirstRender = true;
 
     const render = () => {
-      process.stdout.write("\x1b[2J\x1b[0f");
+      if (isFirstRender) {
+        process.stdout.write("\x1b[s");
+        isFirstRender = false;
+      } else {
+        process.stdout.write("\x1b[u");
+        process.stdout.write("\x1b[0J");
+      }
       log(title);
       log("");
       items.forEach((item, i) => {
@@ -131,6 +139,7 @@ const promptSelect = async (title, items, defaultIndex = 0) => {
         process.stdin.setRawMode(false);
         process.stdin.pause();
         process.stdin.removeListener("data", onKey);
+        process.stdout.write("\x1b[?25h");
         resolve(items[index]);
         return;
       }
@@ -147,6 +156,7 @@ const promptSelect = async (title, items, defaultIndex = 0) => {
     process.stdin.setRawMode(true);
     process.stdin.resume();
     process.stdin.on("data", onKey);
+    process.stdout.write("\x1b[?25l");
     render();
   });
 };
@@ -163,8 +173,8 @@ const init = async () => {
   const yes = hasFlag("--yes");
 
   log("");
-  log("Welcome to Gradient Forge.");
-  log("Let's scaffold the theming system into your project.");
+  log("Gradient Forge");
+  log("Crafting the theme engine for your shadcn project...");
   log("");
 
   const themeChoice = yes
