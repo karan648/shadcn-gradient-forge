@@ -4,7 +4,7 @@ import { useMemo, useState } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Check, Copy, FileCode2 } from "lucide-react";
+import { AlertCircle, Check, Copy, FileCode2, Loader2 } from "lucide-react";
 
 type CodeSnippet = {
   id: string;
@@ -83,30 +83,65 @@ export const MEMORY_LANE_THEME = {
 }`,
   },
   {
-    id: "use-theme",
-    label: "Theme Hook",
+    id: "theme-context",
+    label: "Theme Context",
     path: "components/theme/theme-context.tsx",
-    description: "Use setThemeId and setColorMode in your components.",
+    description: "Client provider that applies theme and color mode state.",
     code: `"use client";
 
-import { useThemeContext } from "@/components/theme/theme-context";
+import { createContext, useContext, useState } from "react";
+import { applyTheme } from "@/components/theme/theme-engine";
 
-export function ThemeActions() {
-  const { themeId, colorMode, setThemeId, setColorMode } = useThemeContext();
+const ThemeContext = createContext(null);
+
+export function ThemeProvider({ children }: { children: React.ReactNode }) {
+  const [themeId, setThemeId] = useState("theme-nitro-midnight-blurple");
+  const [colorMode, setColorMode] = useState<"dark" | "light">("dark");
+
+  const updateTheme = (nextTheme: string) => {
+    setThemeId(nextTheme);
+    applyTheme(nextTheme, colorMode);
+  };
+
+  const updateMode = (nextMode: "dark" | "light") => {
+    setColorMode(nextMode);
+    applyTheme(themeId, nextMode);
+  };
 
   return (
-    <div>
-      <p>{themeId}</p>
-      <p>{colorMode}</p>
-      <button onClick={() => setColorMode(colorMode === "dark" ? "light" : "dark")}>Toggle mode</button>
-      <button onClick={() => setThemeId("theme-nitro-aurora")}>Set Aurora</button>
-    </div>
+    <ThemeContext.Provider value={{ themeId, colorMode, setThemeId: updateTheme, setColorMode: updateMode }}>
+      {children}
+    </ThemeContext.Provider>
   );
-}`,
+}
+
+export const useThemeContext = () => {
+  const context = useContext(ThemeContext);
+  if (!context) throw new Error("useThemeContext must be used within ThemeProvider");
+  return context;
+};`,
   },
 ];
 
-const copyLabel = (status: "idle" | "copied" | "error") => {
+const requiredSnippetIds = [
+  "root-layout",
+  "theme-engine",
+  "theme-context",
+  "globals",
+] as const;
+
+const getSetupPack = () => {
+  return requiredSnippetIds
+    .map((id) => snippets.find((snippet) => snippet.id === id))
+    .filter((snippet): snippet is CodeSnippet => Boolean(snippet))
+    .map((snippet) => `// ${snippet.path}\n${snippet.code}`)
+    .join("\n\n");
+};
+
+type CopyStatus = "idle" | "copying" | "copied" | "error";
+
+const copyLabel = (status: CopyStatus) => {
+  if (status === "copying") return "Copying...";
   if (status === "copied") return "Copied";
   if (status === "error") return "Copy failed";
   return "Copy code";
@@ -115,7 +150,7 @@ const copyLabel = (status: "idle" | "copied" | "error") => {
 export function StudioCodePanel() {
   const [tab, setTab] = useState<"preview" | "code">("preview");
   const [activeId, setActiveId] = useState(snippets[0].id);
-  const [copyState, setCopyState] = useState<Record<string, "idle" | "copied" | "error">>({});
+  const [copyState, setCopyState] = useState<Record<string, CopyStatus>>({});
 
   const activeSnippet = useMemo(
     () => snippets.find((snippet) => snippet.id === activeId) ?? snippets[0],
@@ -123,6 +158,7 @@ export function StudioCodePanel() {
   );
 
   const handleCopy = async (id: string, content: string) => {
+    setCopyState((prev) => ({ ...prev, [id]: "copying" }));
     try {
       await navigator.clipboard.writeText(content);
       setCopyState((prev) => ({ ...prev, [id]: "copied" }));
@@ -131,8 +167,14 @@ export function StudioCodePanel() {
       }, 1400);
     } catch {
       setCopyState((prev) => ({ ...prev, [id]: "error" }));
+      window.setTimeout(() => {
+        setCopyState((prev) => ({ ...prev, [id]: "idle" }));
+      }, 2000);
     }
   };
+
+  const setupPackState = copyState["setup-pack"] ?? "idle";
+  const activeSnippetState = copyState[activeSnippet.id] ?? "idle";
 
   return (
     <Card className="border-border/50 bg-background/60">
@@ -173,9 +215,37 @@ export function StudioCodePanel() {
               Add data-theme attributes to your app root, import global tokens, and use ThemeProvider to keep
               theme state synced across shadcn components.
             </p>
+            <div className="mt-3 flex flex-wrap gap-2">
+              {requiredSnippetIds.map((id) => {
+                const snippet = snippets.find((item) => item.id === id);
+                if (!snippet) return null;
+                return (
+                  <Badge key={id} variant="outline">
+                    {snippet.path}
+                  </Badge>
+                );
+              })}
+            </div>
             <div className="mt-4 flex flex-wrap gap-2">
               <Button variant="outline" size="sm" asChild>
                 <a href="/docs">Open docs</a>
+              </Button>
+              <Button
+                variant="secondary"
+                size="sm"
+                onClick={() => handleCopy("setup-pack", getSetupPack())}
+                disabled={setupPackState === "copying"}
+              >
+                {setupPackState === "copying" ? (
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                ) : setupPackState === "copied" ? (
+                  <Check className="h-4 w-4" />
+                ) : setupPackState === "error" ? (
+                  <AlertCircle className="h-4 w-4" />
+                ) : (
+                  <Copy className="h-4 w-4" />
+                )}
+                {copyLabel(setupPackState)}
               </Button>
               <Button variant="ghost" size="sm" onClick={() => setTab("code")}>
                 Open code snippets
@@ -207,13 +277,35 @@ export function StudioCodePanel() {
                   variant="outline"
                   size="sm"
                   onClick={() => handleCopy(activeSnippet.id, activeSnippet.code)}
+                  disabled={activeSnippetState === "copying"}
                 >
-                  {copyState[activeSnippet.id] === "copied" ? (
+                  {activeSnippetState === "copying" ? (
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                  ) : activeSnippetState === "copied" ? (
                     <Check className="h-4 w-4" />
+                  ) : activeSnippetState === "error" ? (
+                    <AlertCircle className="h-4 w-4" />
                   ) : (
                     <Copy className="h-4 w-4" />
                   )}
-                  {copyLabel(copyState[activeSnippet.id] ?? "idle")}
+                  {copyLabel(activeSnippetState)}
+                </Button>
+                <Button
+                  variant="secondary"
+                  size="sm"
+                  onClick={() => handleCopy("setup-pack", getSetupPack())}
+                  disabled={setupPackState === "copying"}
+                >
+                  {setupPackState === "copying" ? (
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                  ) : setupPackState === "copied" ? (
+                    <Check className="h-4 w-4" />
+                  ) : setupPackState === "error" ? (
+                    <AlertCircle className="h-4 w-4" />
+                  ) : (
+                    <Copy className="h-4 w-4" />
+                  )}
+                  {copyLabel(setupPackState)}
                 </Button>
               </div>
               <pre className="mt-4 max-h-[360px] overflow-auto rounded-2xl border border-border/40 bg-black/80 p-4 text-xs text-white/90">
