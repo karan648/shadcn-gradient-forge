@@ -109,16 +109,16 @@ const navItems = [
         href: "/"
     },
     {
-        label: "Studio",
-        href: "/studio"
-    },
-    {
-        label: "Gallery",
+        label: "Themes",
         href: "/gallery"
     },
     {
-        label: "Components",
-        href: "/library"
+        label: "Showcase",
+        href: "/showcase"
+    },
+    {
+        label: "Studio",
+        href: "/studio"
     },
     {
         label: "Docs",
@@ -1181,15 +1181,22 @@ function useTabs() {
     }
     return context;
 }
-function Tabs({ value, onValueChange, children, className }) {
+function Tabs({ value, defaultValue, onValueChange, children, className }) {
+    const [internalValue, setInternalValue] = __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"](defaultValue ?? "");
+    const isControlled = value !== undefined;
+    const currentValue = isControlled ? value : internalValue;
     const handleValueChange = __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useCallback"]((newValue)=>{
+        if (!isControlled) {
+            setInternalValue(newValue);
+        }
         onValueChange?.(newValue);
     }, [
+        isControlled,
         onValueChange
     ]);
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(TabsContext.Provider, {
         value: {
-            value,
+            value: currentValue,
             onValueChange: handleValueChange
         },
         children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1197,12 +1204,12 @@ function Tabs({ value, onValueChange, children, className }) {
             children: children
         }, void 0, false, {
             fileName: "[project]/components/ui/tabs.tsx",
-            lineNumber: 48,
+            lineNumber: 57,
             columnNumber: 7
         }, this)
     }, void 0, false, {
         fileName: "[project]/components/ui/tabs.tsx",
-        lineNumber: 47,
+        lineNumber: 56,
         columnNumber: 5
     }, this);
 }
@@ -1212,7 +1219,7 @@ function TabsList({ children, className }) {
         children: children
     }, void 0, false, {
         fileName: "[project]/components/ui/tabs.tsx",
-        lineNumber: 55,
+        lineNumber: 64,
         columnNumber: 5
     }, this);
 }
@@ -1228,7 +1235,7 @@ function TabsTrigger({ value, children, className }) {
         children: children
     }, void 0, false, {
         fileName: "[project]/components/ui/tabs.tsx",
-        lineNumber: 71,
+        lineNumber: 80,
         columnNumber: 5
     }, this);
 }
@@ -1242,7 +1249,7 @@ function TabsContent({ value, children, className }) {
         children: children
     }, void 0, false, {
         fileName: "[project]/components/ui/tabs.tsx",
-        lineNumber: 96,
+        lineNumber: 105,
         columnNumber: 5
     }, this);
 }
@@ -3592,8 +3599,8 @@ function HomePage() {
                                                 className: "sm:size-lg text-xs sm:text-sm",
                                                 asChild: true,
                                                 children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("a", {
-                                                    href: "/library",
-                                                    children: "Component Library"
+                                                    href: "/showcase",
+                                                    children: "View Showcase"
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/page.tsx",
                                                     lineNumber: 148,
@@ -4591,8 +4598,8 @@ function HomePage() {
                                                             className: "sm:size-default text-xs sm:text-sm",
                                                             asChild: true,
                                                             children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("a", {
-                                                                href: "/library",
-                                                                children: "Browse Components"
+                                                                href: "/showcase",
+                                                                children: "View Templates"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/app/page.tsx",
                                                                 lineNumber: 424,

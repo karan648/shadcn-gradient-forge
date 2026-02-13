@@ -145,7 +145,7 @@ export default function HomePage() {
               </MagneticButton>
               <MagneticButton className="hero-cta" strength={0.2}>
                 <Button variant="secondary" size="sm" className="sm:size-lg text-xs sm:text-sm" asChild>
-                  <a href="/library">Component Library</a>
+                  <a href="/showcase">View Showcase</a>
                 </Button>
               </MagneticButton>
               <MagneticButton className="hero-cta" strength={0.2}>
@@ -421,7 +421,7 @@ export default function HomePage() {
                   </MagneticButton>
                   <MagneticButton strength={0.15}>
                     <Button variant="secondary" size="sm" className="sm:size-default text-xs sm:text-sm" asChild>
-                      <a href="/library">Browse Components</a>
+                      <a href="/showcase">View Templates</a>
                     </Button>
                   </MagneticButton>
                   <MagneticButton strength={0.15}>

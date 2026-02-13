@@ -124,16 +124,16 @@ const navItems = [
         href: "/"
     },
     {
-        label: "Studio",
-        href: "/studio"
-    },
-    {
-        label: "Gallery",
+        label: "Themes",
         href: "/gallery"
     },
     {
-        label: "Components",
-        href: "/library"
+        label: "Showcase",
+        href: "/showcase"
+    },
+    {
+        label: "Studio",
+        href: "/studio"
     },
     {
         label: "Docs",

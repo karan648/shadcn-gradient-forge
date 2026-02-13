@@ -2,7 +2,8 @@ import * as React from "react";
 import { cn } from "@/lib/utils";
 
 interface TabsProps {
-  value: string;
+  value?: string;
+  defaultValue?: string;
   onValueChange?: (value: string) => void;
   children: React.ReactNode;
   className?: string;
@@ -38,13 +39,21 @@ function useTabs() {
   return context;
 }
 
-export function Tabs({ value, onValueChange, children, className }: TabsProps) {
+export function Tabs({ value, defaultValue, onValueChange, children, className }: TabsProps) {
+  const [internalValue, setInternalValue] = React.useState(defaultValue ?? "");
+  
+  const isControlled = value !== undefined;
+  const currentValue = isControlled ? value : internalValue;
+  
   const handleValueChange = React.useCallback((newValue: string) => {
+    if (!isControlled) {
+      setInternalValue(newValue);
+    }
     onValueChange?.(newValue);
-  }, [onValueChange]);
+  }, [isControlled, onValueChange]);
 
   return (
-    <TabsContext.Provider value={{ value, onValueChange: handleValueChange }}>
+    <TabsContext.Provider value={{ value: currentValue, onValueChange: handleValueChange }}>
       <div className={cn("w-full", className)}>{children}</div>
     </TabsContext.Provider>
   );

@@ -193,30 +193,45 @@ __turbopack_context__.s([
     ()=>Switch
 ]);
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/compiled/react/jsx-dev-runtime.js [app-client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/compiled/react/index.js [app-client] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$utils$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/lib/utils.ts [app-client] (ecmascript)");
 ;
+var _s = __turbopack_context__.k.signature();
 ;
-function Switch({ checked, onCheckedChange, label }) {
+;
+function Switch({ checked, defaultChecked = false, onCheckedChange, label }) {
+    _s();
+    const [internalChecked, setInternalChecked] = __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"](defaultChecked);
+    const isControlled = checked !== undefined;
+    const isChecked = isControlled ? checked : internalChecked;
+    const handleClick = ()=>{
+        const newValue = !isChecked;
+        if (!isControlled) {
+            setInternalChecked(newValue);
+        }
+        onCheckedChange?.(newValue);
+    };
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
         type: "button",
         role: "switch",
-        "aria-checked": checked,
+        "aria-checked": isChecked,
         "aria-label": label,
-        onClick: ()=>onCheckedChange(!checked),
-        className: (0, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$utils$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["cn"])("relative inline-flex h-7 w-12 items-center rounded-full border border-border/60 bg-background/40 transition-all", checked && "bg-primary/30 border-primary/50"),
+        onClick: handleClick,
+        className: (0, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$utils$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["cn"])("relative inline-flex h-7 w-12 items-center rounded-full border border-border/60 bg-background/40 transition-all", isChecked && "bg-primary/30 border-primary/50"),
         children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-            className: (0, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$utils$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["cn"])("h-5 w-5 translate-x-1 rounded-full bg-foreground/80 shadow transition-all", checked && "translate-x-6 bg-primary")
+            className: (0, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$utils$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["cn"])("h-5 w-5 translate-x-1 rounded-full bg-foreground/80 shadow transition-all", isChecked && "translate-x-6 bg-primary")
         }, void 0, false, {
             fileName: "[project]/components/ui/switch.tsx",
-            lineNumber: 23,
+            lineNumber: 35,
             columnNumber: 7
         }, this)
     }, void 0, false, {
         fileName: "[project]/components/ui/switch.tsx",
-        lineNumber: 12,
+        lineNumber: 24,
         columnNumber: 5
     }, this);
 }
+_s(Switch, "PNxWJPGqxGHnOH72tjOX5tlwnRE=");
 _c = Switch;
 var _c;
 __turbopack_context__.k.register(_c, "Switch");
@@ -2852,16 +2867,16 @@ const navItems = [
         href: "/"
     },
     {
-        label: "Studio",
-        href: "/studio"
-    },
-    {
-        label: "Gallery",
+        label: "Themes",
         href: "/gallery"
     },
     {
-        label: "Components",
-        href: "/library"
+        label: "Showcase",
+        href: "/showcase"
+    },
+    {
+        label: "Studio",
+        href: "/studio"
     },
     {
         label: "Docs",

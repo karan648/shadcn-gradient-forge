@@ -30,7 +30,7 @@ The app is fully multi-page. Explore:
 - `/` Home
 - `/studio` Interactive theme studio
 - `/gallery` Theme gallery
-- `/library` Premium component library
+- `/showcase` Template showcase with live previews
 - `/docs` Installation and CLI documentation
 
 ## Quick Start
@@ -52,7 +52,7 @@ npm run dev
 - `app/page.tsx` - Home experience and component previews.
 - `app/studio/page.tsx` - Interactive theme studio.
 - `app/gallery/page.tsx` - Gradient gallery.
-- `app/library/page.tsx` - Premium component previews + copyable source code.
+- `app/showcase/page.tsx` - Template showcase with live theme previews.
 - `app/docs/page.tsx` - Installation and CLI documentation.
 - `app/globals.css` - Gradient tokens, theme classes, and surface overlays.
 - `components/theme/theme-engine.ts` - Theme catalog + persistence helpers.

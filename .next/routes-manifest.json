@@ -53,10 +53,10 @@
       "namedRegex": "^/gallery(?:/)?$"
     },
     {
-      "page": "/library",
-      "regex": "^/library(?:/)?$",
+      "page": "/showcase",
+      "regex": "^/showcase(?:/)?$",
       "routeKeys": {},
-      "namedRegex": "^/library(?:/)?$"
+      "namedRegex": "^/showcase(?:/)?$"
     },
     {
       "page": "/studio",

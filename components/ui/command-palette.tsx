@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Search, Command, Sun, Moon, Palette, Code, Library, Image, FileText, Home, X, Sparkles } from "lucide-react";
+import { Search, Command, Sun, Moon, Palette, Code, LayoutTemplate, Image, FileText, Home, X, Sparkles } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useThemeContext } from "@/components/theme/theme-context";
 import { NITRO_ALL_THEMES, type ThemeId } from "@/components/theme/theme-engine";
@@ -57,7 +57,7 @@ export function CommandPalette() {
     {
       id: "nav-studio",
       label: "Open Studio",
-      shortcut: "S",
+      shortcut: "T",
       icon: <Palette className="h-4 w-4" />,
       action: () => { router.push("/studio"); close(); },
       category: "Navigation",
@@ -71,11 +71,11 @@ export function CommandPalette() {
       category: "Navigation",
     },
     {
-      id: "nav-library",
-      label: "Browse Library",
-      shortcut: "L",
-      icon: <Library className="h-4 w-4" />,
-      action: () => { router.push("/library"); close(); },
+      id: "nav-showcase",
+      label: "View Showcase",
+      shortcut: "S",
+      icon: <LayoutTemplate className="h-4 w-4" />,
+      action: () => { router.push("/showcase"); close(); },
       category: "Navigation",
     },
     {
