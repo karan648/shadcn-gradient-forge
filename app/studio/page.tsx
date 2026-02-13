@@ -93,6 +93,275 @@ const previewSections = [
   { id: "feedback", label: "Feedback", icon: PaletteIcon },
 ];
 
+// Core theme files with their content
+const coreFilesData: Record<string, { filename: string; description: string; extension: string; content: string }> = {
+  "theme-engine": {
+    filename: "components/theme/theme-engine.ts",
+    description: "Core theme logic & definitions",
+    extension: "ts",
+    content: `export const NITRO_PUBLIC_THEMES = [
+  { id: "theme-nitro-mint-apple", label: "Mint Apple", preview: "radial-gradient(circle at 12% 10%, #b2ffe1 0%, transparent 42%), linear-gradient(145deg, #2d8e74 0%, #70c76a 46%, #d5ef91 100%)" },
+  { id: "theme-nitro-citrus-sherbert", label: "Citrus Sherbert", preview: "radial-gradient(circle at 10% 10%, #ffd37d 0%, transparent 42%), linear-gradient(145deg, #e67d35 0%, #f7bb54 46%, #fff0a3 100%)" },
+  { id: "theme-nitro-retro-raincloud", label: "Retro Raincloud", preview: "radial-gradient(circle at 12% 10%, #b3c6dc 0%, transparent 42%), linear-gradient(145deg, #4e6077 0%, #6f86a0 46%, #98aec3 100%)" },
+  { id: "theme-nitro-hanami", label: "Hanami", preview: "radial-gradient(circle at 12% 10%, #ffd5e7 0%, transparent 42%), linear-gradient(145deg, #995382 0%, #c77ca9 46%, #f0b7ce 100%)" },
+  { id: "theme-nitro-sunrise", label: "Sunrise", preview: "radial-gradient(circle at 12% 10%, #ffb596 0%, transparent 42%), linear-gradient(145deg, #e25263 0%, #ef8a57 46%, #ffd07a 100%)" },
+  { id: "theme-nitro-cotton-candy", label: "Cotton Candy", preview: "radial-gradient(circle at 12% 10%, #c8e9ff 0%, transparent 42%), linear-gradient(145deg, #5aa2ff 0%, #9b78f0 46%, #f39bca 100%)" },
+  { id: "theme-nitro-lofi-vibes", label: "Lofi Vibes", preview: "radial-gradient(circle at 10% 10%, #8e97c6 0%, transparent 42%), linear-gradient(145deg, #3f476c 0%, #59608f 46%, #7a6f9f 100%)" },
+  { id: "theme-nitro-desert-khaki", label: "Desert Khaki", preview: "radial-gradient(circle at 10% 10%, #d5bf92 0%, transparent 42%), linear-gradient(145deg, #6d5c49 0%, #8f7a5d 46%, #b49f76 100%)" },
+  { id: "theme-nitro-sunset", label: "Sunset", preview: "radial-gradient(circle at 10% 10%, #d66a82 0%, transparent 42%), linear-gradient(145deg, #3f1b4d 0%, #8c335f 46%, #f4874f 100%)" },
+  { id: "theme-nitro-chroma-glow", label: "Chroma Glow", preview: "radial-gradient(circle at 10% 10%, #7f8dff 0%, transparent 42%), linear-gradient(145deg, #2d3eff 0%, #a726fa 46%, #00c7ff 100%)" },
+  { id: "theme-nitro-forest", label: "Forest", preview: "radial-gradient(circle at 10% 10%, #56be87 0%, transparent 42%), linear-gradient(145deg, #163f2e 0%, #246b49 46%, #59a86c 100%)" },
+  { id: "theme-nitro-crimson", label: "Crimson", preview: "radial-gradient(circle at 10% 10%, #c23956 0%, transparent 42%), linear-gradient(145deg, #2d050f 0%, #681126 46%, #a82435 100%)" },
+  { id: "theme-nitro-midnight-blurple", label: "Midnight Blurple", preview: "radial-gradient(circle at 10% 10%, #6d6eff 0%, transparent 42%), linear-gradient(145deg, #0f1232 0%, #25366f 46%, #5757dc 100%)" },
+  { id: "theme-nitro-mars", label: "Mars", preview: "radial-gradient(circle at 10% 10%, #cc654c 0%, transparent 42%), linear-gradient(145deg, #2e140f 0%, #5e261d 46%, #9c422f 100%)" },
+  { id: "theme-nitro-dusk", label: "Dusk", preview: "radial-gradient(circle at 10% 10%, #9475c1 0%, transparent 42%), linear-gradient(145deg, #1b1632 0%, #3b2d5b 46%, #745495 100%)" },
+  { id: "theme-nitro-under-the-sea", label: "Under The Sea", preview: "radial-gradient(circle at 10% 10%, #3ea6b7 0%, transparent 42%), linear-gradient(145deg, #0b2242 0%, #0d4f69 46%, #2b848e 100%)" },
+  { id: "theme-nitro-retro-storm", label: "Retro Storm", preview: "radial-gradient(circle at 10% 10%, #7e95ab 0%, transparent 42%), linear-gradient(145deg, #1d2b3a 0%, #354657 46%, #55667a 100%)" },
+  { id: "theme-nitro-neon-nights", label: "Neon Nights", preview: "radial-gradient(circle at 10% 10%, #d13eff 0%, transparent 42%), linear-gradient(145deg, #05061a 0%, #180f52 46%, #00bde6 100%)" },
+  { id: "theme-nitro-strawberry-lemonade", label: "Strawberry Lemonade", preview: "radial-gradient(circle at 10% 10%, #ff8aa8 0%, transparent 42%), linear-gradient(145deg, #8f1847 0%, #cc3f5e 46%, #efc141 100%)" },
+  { id: "theme-nitro-aurora", label: "Aurora", preview: "radial-gradient(circle at 10% 10%, #41cbb1 0%, transparent 42%), linear-gradient(145deg, #083142 0%, #1b7e74 46%, #5fbf75 100%)" },
+  { id: "theme-nitro-sepia", label: "Sepia", preview: "radial-gradient(circle at 10% 10%, #b99672 0%, transparent 42%), linear-gradient(145deg, #35261d 0%, #5d4636 46%, #927454 100%)" },
+] as const;
+
+export const MEMORY_LANE_THEME = {
+  id: "theme-nitro-memory-lane",
+  label: "Memory Lane",
+  preview: "radial-gradient(circle at 10% 10%, #ba8fd4 0%, transparent 42%), linear-gradient(145deg, #462d42 0%, #684b75 35%, #4a7199 68%, #77ad9f 100%)",
+} as const;
+
+export const NITRO_ALL_THEMES = [...NITRO_PUBLIC_THEMES, MEMORY_LANE_THEME] as const;
+export type ThemeId = (typeof NITRO_ALL_THEMES)[number]["id"];
+export type ColorMode = "dark" | "light";
+
+const DEFAULT_THEME: ThemeId = "theme-nitro-midnight-blurple";
+const DEFAULT_COLOR_MODE: ColorMode = "dark";
+const THEME_STORAGE_KEY = "shadcn-gradient.theme";
+const COLOR_MODE_STORAGE_KEY = "shadcn-gradient.color-mode";
+
+export const normalizeTheme = (theme?: string | null): ThemeId => {
+  if (!theme) return DEFAULT_THEME;
+  return theme as ThemeId;
+};
+
+export const normalizeColorMode = (mode?: string | null): ColorMode => {
+  if (mode === "light") return "light";
+  return DEFAULT_COLOR_MODE;
+};
+
+export const getStoredTheme = (): ThemeId => {
+  if (typeof window === "undefined") return DEFAULT_THEME;
+  return normalizeTheme(localStorage.getItem(THEME_STORAGE_KEY));
+};
+
+export const getStoredColorMode = (): ColorMode => {
+  if (typeof window === "undefined") return DEFAULT_COLOR_MODE;
+  return normalizeColorMode(localStorage.getItem(COLOR_MODE_STORAGE_KEY));
+};
+
+export const applyTheme = (theme?: string | null, mode?: ColorMode) => {
+  if (typeof window === "undefined") return;
+  const normalizedTheme = normalizeTheme(theme);
+  const normalizedMode = normalizeColorMode(mode ?? getStoredColorMode());
+  const root = document.documentElement;
+  
+  Array.from(root.classList).forEach((className) => {
+    if (className === "dark" || className === "light" || className.startsWith("theme-nitro-")) {
+      root.classList.remove(className);
+    }
+  });
+  
+  root.classList.add(normalizedMode, normalizedTheme);
+  root.setAttribute("data-theme", normalizedTheme);
+  root.setAttribute("data-color-mode", normalizedMode);
+  localStorage.setItem(THEME_STORAGE_KEY, normalizedTheme);
+  localStorage.setItem(COLOR_MODE_STORAGE_KEY, normalizedMode);
+};
+
+export const defaultTheme = DEFAULT_THEME;
+export const defaultColorMode = DEFAULT_COLOR_MODE;`
+  },
+  "theme-context": {
+    filename: "components/theme/theme-context.tsx",
+    description: "React context provider",
+    extension: "tsx",
+    content: `"use client";
+
+import {
+  type ColorMode,
+  type ThemeId,
+  NITRO_ALL_THEMES,
+  applyTheme,
+  defaultColorMode,
+  defaultTheme,
+  getStoredColorMode,
+  getStoredTheme,
+} from "@/components/theme/theme-engine";
+import { createContext, useContext, useEffect, useState } from "react";
+
+type ThemeContextValue = {
+  themeId: ThemeId;
+  colorMode: ColorMode;
+  setThemeId: (themeId: ThemeId) => void;
+  setColorMode: (mode: ColorMode) => void;
+};
+
+const ThemeContext = createContext<ThemeContextValue | null>(null);
+
+export const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
+  const [themeId, setThemeIdState] = useState<ThemeId>(defaultTheme);
+  const [colorMode, setColorModeState] = useState<ColorMode>(defaultColorMode);
+
+  useEffect(() => {
+    const storedTheme = getStoredTheme();
+    const storedMode = getStoredColorMode();
+    setThemeIdState(storedTheme);
+    setColorModeState(storedMode);
+    applyTheme(storedTheme, storedMode);
+  }, []);
+
+  useEffect(() => {
+    applyTheme(themeId, colorMode);
+  }, [themeId, colorMode]);
+
+  const setThemeId = (nextTheme: ThemeId) => {
+    setThemeIdState(nextTheme);
+  };
+
+  const setColorMode = (mode: ColorMode) => {
+    setColorModeState(mode);
+  };
+
+  return (
+    <ThemeContext.Provider value={{ themeId, colorMode, setThemeId, setColorMode }}>
+      {children}
+    </ThemeContext.Provider>
+  );
+};
+
+export const useThemeContext = () => {
+  const ctx = useContext(ThemeContext);
+  if (!ctx) throw new Error("useThemeContext must be used within ThemeProvider");
+  return ctx;
+};`
+  },
+  "token-export-utils": {
+    filename: "components/theme/token-export-utils.ts",
+    description: "Export utilities for tokens",
+    extension: "ts",
+    content: `import { NITRO_ALL_THEMES, type ThemeId } from "./theme-engine";
+
+const themeTokens: Record<string, Record<string, string>> = {
+  "theme-nitro-midnight-blurple": {
+    "--background": "235 26% 11%",
+    "--foreground": "235 30% 95%",
+    "--card": "235 22% 12%",
+    "--primary": "241 92% 70%",
+    "--accent": "210 92% 65%",
+    "--ring": "241 92% 70%",
+    "--app-surface-tint": "hsl(241 92% 70% / 0.1)",
+  },
+};
+
+export type ExportFormat = "css" | "json" | "tailwind";
+
+export interface ExportOptions {
+  format: ExportFormat;
+  themeId: ThemeId;
+  colorMode?: "dark" | "light";
+}
+
+export interface ExportResult {
+  content: string;
+  filename: string;
+  mimeType: string;
+}
+
+export const getThemeTokens = (themeId: ThemeId): Record<string, string> => {
+  return themeTokens[themeId] ?? themeTokens["theme-nitro-midnight-blurple"];
+};
+
+export const generateCSSExport = (options: ExportOptions): ExportResult => {
+  const { themeId } = options;
+  const tokens = getThemeTokens(themeId);
+  const cssVariables = Object.entries(tokens)
+    .map(([key, value]) => \`  \${key}: \${value};\`)
+    .join("\\n");
+  
+  const content = \`/* Gradient Forge Theme */
+.\${themeId} {
+\${cssVariables}
+}\`;
+
+  return { content, filename: \`\${themeId}.css\`, mimeType: "text/css" };
+};
+
+export const exportTokens = (options: ExportOptions): ExportResult => {
+  return generateCSSExport(options);
+};
+
+export const downloadFile = (result: ExportResult): void => {
+  const blob = new Blob([result.content], { type: result.mimeType });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = result.filename;
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  URL.revokeObjectURL(url);
+};`
+  },
+  "globals-css": {
+    filename: "app/globals.css",
+    description: "CSS variables & theme classes",
+    extension: "css",
+    content: `@import "tailwindcss";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme {
+  --color-background: hsl(var(--background));
+  --color-foreground: hsl(var(--foreground));
+  --color-card: hsl(var(--card));
+  --color-primary: hsl(var(--primary));
+  --color-accent: hsl(var(--accent));
+  --radius-lg: var(--radius);
+}
+
+@layer base {
+  body {
+    background-color: hsl(var(--background) / 0.9);
+    background-image: var(--app-gradient);
+    color: hsl(var(--foreground));
+  }
+}
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 0 0% 3.9%;
+    --card: 0 0% 100%;
+    --primary: 0 0% 9%;
+    --radius: 0.9rem;
+  }
+
+  .dark {
+    --background: 0 0% 3.9%;
+    --foreground: 0 0% 98%;
+    --app-gradient: radial-gradient(1100px 560px at -10% -20%, hsl(250 90% 66% / 0.28), transparent 60%);
+    --app-surface-tint: hsl(250 85% 65% / 0.08);
+  }
+
+  .theme-nitro-midnight-blurple {
+    --background: 235 26% 11%;
+    --primary: 241 92% 70%;
+    --app-gradient: radial-gradient(1050px 560px at -10% -20%, hsl(246 92% 66% / 0.3), transparent 60%);
+    --app-surface-tint: hsl(241 92% 70% / 0.1);
+  }
+}`
+  }
+};
+
 export default function StudioPage() {
   const [activeSection, setActiveSection] = useState("overview");
   const [deviceView, setDeviceView] = useState<"mobile" | "tablet" | "desktop">("desktop");
@@ -100,6 +369,7 @@ export default function StudioPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [showCssVariables, setShowCssVariables] = useState(true);
   const [previewColorMode, setPreviewColorMode] = useState<"light" | "dark">("light");
+  const [selectedCoreFile, setSelectedCoreFile] = useState<string | null>(null);
   const { showToast } = useToast();
   const { themeId, setThemeId, colorMode, setColorMode } = useThemeContext();
   const previewRef = useRef<HTMLDivElement>(null);
@@ -382,31 +652,91 @@ export default function StudioPage() {
           </div>
 
           <div className="flex-1 overflow-hidden flex flex-col">
+            {/* Core Files Documentation */}
+            <div className="px-4 py-3 border-b border-border/50 bg-muted/20">
+              <p className="text-[10px] font-medium text-muted-foreground uppercase tracking-wider mb-2">Core Theme Files - Click to View & Copy</p>
+              <div className="space-y-1.5">
+                {Object.entries(coreFilesData).map(([key, file]) => (
+                  <button
+                    key={key}
+                    onClick={() => setSelectedCoreFile(selectedCoreFile === key ? null : key)}
+                    className={cn(
+                      "w-full flex items-center gap-2 text-xs p-1.5 rounded border transition-all text-left",
+                      selectedCoreFile === key
+                        ? "bg-primary/10 border-primary/30"
+                        : "bg-background/50 border-border/30 hover:bg-background/80"
+                    )}
+                  >
+                    <FileCode className={cn("h-3 w-3 shrink-0", selectedCoreFile === key ? "text-primary" : "text-muted-foreground")} />
+                    <div className="flex-1 min-w-0">
+                      <p className={cn("font-medium truncate", selectedCoreFile === key && "text-primary")}>{file.filename}</p>
+                      <p className="text-[10px] text-muted-foreground truncate">{file.description}</p>
+                    </div>
+                    {selectedCoreFile === key && <Check className="h-3 w-3 text-primary shrink-0" />}
+                  </button>
+                ))}
+              </div>
+              {selectedCoreFile && (
+                <div className="mt-3 p-2 bg-black/90 rounded border border-primary/20">
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-[10px] text-primary font-medium">{coreFilesData[selectedCoreFile].filename}</span>
+                    <button
+                      onClick={() => {
+                        navigator.clipboard.writeText(coreFilesData[selectedCoreFile].content);
+                        showToast("File copied to clipboard!", "success");
+                      }}
+                      className="text-[10px] px-2 py-1 bg-primary/20 hover:bg-primary/30 text-primary rounded transition-colors"
+                    >
+                      Copy File
+                    </button>
+                  </div>
+                  <pre className="text-[10px] text-green-400 overflow-auto max-h-[200px] whitespace-pre-wrap break-all">
+                    {coreFilesData[selectedCoreFile].content}
+                  </pre>
+                </div>
+              )}
+            </div>
+
             <div className="flex items-center justify-between px-4 py-2 border-b border-border/50">
-              <span className="text-xs font-medium text-muted-foreground">Generated Code</span>
+              <span className="text-xs font-medium text-muted-foreground">
+                {selectedCoreFile ? `Viewing: ${coreFilesData[selectedCoreFile].filename}` : "Generated Code"}
+              </span>
               <div className="flex items-center gap-1">
                 <button
-                  onClick={handleCopyCode}
+                  onClick={() => {
+                    const content = selectedCoreFile 
+                      ? coreFilesData[selectedCoreFile].content 
+                      : generateExportCode(selectedFormat, tokens, themeId);
+                    navigator.clipboard.writeText(content);
+                    showToast(selectedCoreFile ? "File copied!" : "Code copied!", "success");
+                  }}
                   className="p-1.5 rounded-md hover:bg-muted transition-colors"
                   title="Copy code"
                 >
                   <Copy className="h-3.5 w-3.5 text-muted-foreground" />
                 </button>
-                <button
-                  onClick={handleDownload}
-                  className="p-1.5 rounded-md hover:bg-muted transition-colors"
-                  title="Download file"
-                >
-                  <DownloadIcon className="h-3.5 w-3.5 text-muted-foreground" />
-                </button>
+                {!selectedCoreFile && (
+                  <button
+                    onClick={handleDownload}
+                    className="p-1.5 rounded-md hover:bg-muted transition-colors"
+                    title="Download file"
+                  >
+                    <DownloadIcon className="h-3.5 w-3.5 text-muted-foreground" />
+                  </button>
+                )}
               </div>
             </div>
             <div className="flex-1 overflow-auto p-4">
               <pre 
                 ref={codeRef}
-                className="text-xs font-mono text-muted-foreground whitespace-pre-wrap break-all"
+                className={cn(
+                  "text-xs whitespace-pre-wrap break-all",
+                  selectedCoreFile ? "text-green-400 font-mono" : "font-mono text-muted-foreground"
+                )}
               >
-                {generateExportCode(selectedFormat, tokens, themeId)}
+                {selectedCoreFile 
+                  ? coreFilesData[selectedCoreFile].content 
+                  : generateExportCode(selectedFormat, tokens, themeId)}
               </pre>
             </div>
           </div>
@@ -419,6 +749,20 @@ export default function StudioPage() {
                 onCheckedChange={setShowCssVariables}
               />
             </div>
+            <Button 
+              variant="outline" 
+              className="w-full gap-2 text-xs border-primary/30 hover:bg-primary/10"
+              onClick={() => {
+                const allFilesContent = Object.entries(coreFilesData)
+                  .map(([key, file]) => `// ===== ${file.filename} =====\\n\\n${file.content}`)
+                  .join("\\n\\n\\n");
+                navigator.clipboard.writeText(allFilesContent);
+                showToast("All core files copied! Paste them into your project.", "success");
+              }}
+            >
+              <FileCode className="h-3.5 w-3.5" />
+              Copy All Core Files
+            </Button>
             <Button 
               variant="outline" 
               className="w-full gap-2 text-xs"

@@ -375,10 +375,10 @@ export default function HomePage() {
               <CardHeader className="px-3 sm:px-4 pt-3 sm:pt-4 pb-2">
                 <CardTitle className="flex items-center gap-2 text-sm sm:text-base">
                   <GitBranch className="h-4 w-4 sm:h-5 sm:w-5 text-accent" />
-                  Roadmap
+                  What's Available
                 </CardTitle>
                 <p className="text-xs sm:text-sm text-muted-foreground">
-                  What is next as we scale the theming system.
+                  Features already live and coming soon.
                 </p>
               </CardHeader>
               <CardContent className="px-3 sm:px-4 pb-3 sm:pb-4">
@@ -388,7 +388,15 @@ export default function HomePage() {
                       key={item.title}
                       className="rounded-xl sm:rounded-2xl border border-border/40 bg-background/50 p-2.5 sm:p-4 hover:border-accent/30 transition-colors"
                     >
-                      <p className="text-xs sm:text-sm font-semibold">{item.title}</p>
+                      <div className="flex items-center justify-between gap-2 mb-1">
+                        <p className="text-xs sm:text-sm font-semibold">{item.title}</p>
+                        <Badge 
+                          variant="outline" 
+                          className={`text-[9px] sm:text-[10px] ${item.status === 'done' ? 'bg-emerald-500/10 text-emerald-500 border-emerald-500/30' : 'bg-amber-500/10 text-amber-500 border-amber-500/30'}`}
+                        >
+                          {item.status === 'done' ? '✓ Live' : 'Coming Soon'}
+                        </Badge>
+                      </div>
                       <p className="text-[10px] sm:text-xs text-muted-foreground">{item.detail}</p>
                     </div>
                   ))}
@@ -445,29 +453,35 @@ export default function HomePage() {
                     <Terminal className="h-4 w-4 sm:h-5 sm:w-5 text-primary" />
                     CLI Export
                   </CardTitle>
-                  <Badge variant="outline" className="text-[10px] sm:text-xs">Ready</Badge>
+                  <Badge variant="outline" className="text-[10px] sm:text-xs bg-amber-500/10 text-amber-500 border-amber-500/30">Coming Soon</Badge>
                 </div>
                 <p className="text-xs sm:text-sm text-muted-foreground">
-                  Export themes in 8+ formats directly from the command line.
+                  CLI launching soon! Use the Studio to export themes in 8+ formats now.
                 </p>
               </CardHeader>
               <CardContent className="px-3 sm:px-4 pb-3 sm:pb-4 space-y-2 sm:space-y-3">
                 {[
-                  { cmd: "init", desc: "Scaffolds theme files and context" },
-                  { cmd: "export", desc: "Generates CSS, JSON, Tailwind, W3C tokens" },
-                  { cmd: "--inject", desc: "Adds theme CSS automatically" },
+                  { cmd: "init", desc: "Scaffolds theme files and context", comingSoon: true },
+                  { cmd: "export", desc: "Generates CSS, JSON, Tailwind, W3C tokens", comingSoon: true },
+                  { cmd: "--inject", desc: "Adds theme CSS automatically", comingSoon: true },
                 ].map((item) => (
                   <div 
                     key={item.cmd}
-                    className="rounded-xl sm:rounded-2xl border border-border/40 bg-background/50 p-2 sm:p-3 hover:border-primary/30 transition-colors"
+                    className="rounded-xl sm:rounded-2xl border border-border/40 bg-background/50 p-2 sm:p-3 hover:border-primary/30 transition-colors opacity-70"
                   >
                     <code className="text-xs sm:text-sm font-semibold text-foreground">{item.cmd}</code>
                     <span className="text-[10px] sm:text-xs text-muted-foreground ml-2">{item.desc}</span>
+                    <Badge variant="outline" className="ml-2 text-[8px] sm:text-[9px] bg-amber-500/10 text-amber-500 border-amber-500/30">Coming Soon</Badge>
                   </div>
                 ))}
-                <pre className="overflow-x-auto rounded-xl sm:rounded-2xl border border-border/40 bg-black/70 p-2 sm:p-3 text-[10px] sm:text-xs text-white/90">
+                <pre className="overflow-x-auto rounded-xl sm:rounded-2xl border border-border/40 bg-black/70 p-2 sm:p-3 text-[10px] sm:text-xs text-white/90 opacity-50">
                   <code>npx gradient-forge export --theme theme-nitro-midnight-blurple --format all</code>
                 </pre>
+                <div className="rounded-lg sm:rounded-xl border border-primary/20 bg-primary/5 p-2 sm:p-3">
+                  <p className="text-[10px] sm:text-xs text-foreground">
+                    🎉 Use <a href="/studio" className="text-primary underline">/studio</a> now to export themes!
+                  </p>
+                </div>
               </CardContent>
             </Card>
 

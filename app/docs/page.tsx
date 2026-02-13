@@ -32,10 +32,47 @@ if (typeof window !== "undefined") {
 }
 
 const runners = [
-  { label: "npx", command: "npx gradient-forge@latest init --inject" },
-  { label: "pnpm", command: "pnpm dlx gradient-forge@latest init --inject" },
-  { label: "yarn", command: "yarn dlx gradient-forge@latest init --inject" },
-  { label: "bun", command: "bunx gradient-forge@latest init --inject" },
+  { label: "npx", command: "npx gradient-forge@latest init --inject", comingSoon: true },
+  { label: "pnpm", command: "pnpm dlx gradient-forge@latest init --inject", comingSoon: true },
+  { label: "yarn", command: "yarn dlx gradient-forge@latest init --inject", comingSoon: true },
+  { label: "bun", command: "bunx gradient-forge@latest init --inject", comingSoon: true },
+];
+
+const installationSteps = [
+  {
+    step: 1,
+    title: "Copy Theme Files",
+    description: "Copy the 3 theme files into your project",
+    action: "Copy Files",
+    files: [
+      "components/theme/theme-engine.ts",
+      "components/theme/theme-context.tsx",
+      "components/theme/token-export-utils.ts"
+    ]
+  },
+  {
+    step: 2,
+    title: "Add CSS Variables",
+    description: "Merge theme CSS into your globals.css",
+    action: "Get CSS",
+    highlight: "Required for themes to work"
+  },
+  {
+    step: 3,
+    title: "Wrap with Provider",
+    description: "Add ThemeProvider to your app layout",
+    action: "View Code",
+    code: `<ThemeProvider>
+  {children}
+</ThemeProvider>`
+  },
+  {
+    step: 4,
+    title: "Set Theme Class",
+    description: "Add theme class to your HTML root",
+    action: "Copy Class",
+    code: `class="dark theme-nitro-midnight-blurple"`
+  }
 ];
 
 const cliOptions = [
@@ -101,7 +138,7 @@ export default function DocsPage() {
             Install the Gradient Forge System
           </h1>
           <p className="max-w-2xl text-xs sm:text-sm text-muted-foreground">
-            Use the CLI for the fastest setup or follow the manual path if you want total control.
+            Quick 4-step setup to add beautiful gradient themes to your shadcn project.
           </p>
         </div>
 
@@ -113,32 +150,24 @@ export default function DocsPage() {
               <CardTitle className="flex items-center gap-2 text-sm sm:text-base">
                 <Terminal className="h-4 w-4 sm:h-5 sm:w-5 text-primary" />
                 Quick Install
+                <Badge variant="outline" className="ml-1 text-[10px] bg-amber-500/10 text-amber-500 border-amber-500/30">Coming Soon</Badge>
               </CardTitle>
               <p className="text-[10px] sm:text-xs text-muted-foreground">
-                Get started in seconds with a single command
+                CLI launching soon! Use the simple copy method below for now.
               </p>
             </CardHeader>
             <CardContent className="relative px-4 sm:px-6 pb-4 sm:pb-6">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3 opacity-60">
                 {runners.map((runner) => (
                   <div 
                     key={runner.label}
-                    className="rounded-lg sm:rounded-xl border border-border/40 bg-background/50 p-2.5 sm:p-3 hover:border-primary/30 transition-colors group"
+                    className="rounded-lg sm:rounded-xl border border-border/40 bg-background/50 p-2.5 sm:p-3 group relative"
                   >
-                    <div className="flex items-center justify-between mb-1.5 sm:mb-2">
+                    <div className="absolute top-2 right-2">
+                      <Badge variant="outline" className="text-[8px] sm:text-[9px] bg-amber-500/10 text-amber-500 border-amber-500/30">Coming Soon</Badge>
+                    </div>
+                    <div className="flex items-center justify-between mb-1.5 sm:mb-2 mt-3">
                       <span className="text-[10px] sm:text-xs font-semibold text-foreground">{runner.label}</span>
-                      <Button 
-                        variant="ghost" 
-                        size="sm" 
-                        className="h-6 sm:h-7 px-1.5 sm:px-2 opacity-0 group-hover:opacity-100 transition-opacity"
-                        onClick={() => handleCopy(runner.command, runner.label)}
-                      >
-                        {copiedCommand === runner.label ? (
-                          <Check className="h-3 w-3 sm:h-3.5 sm:w-3.5 text-emerald-500" />
-                        ) : (
-                          <Copy className="h-3 w-3 sm:h-3.5 sm:w-3.5" />
-                        )}
-                      </Button>
                     </div>
                     <code className="text-[10px] sm:text-xs text-muted-foreground block truncate font-mono">
                       {runner.command}
@@ -159,28 +188,33 @@ export default function DocsPage() {
                 <CardTitle className="flex items-center gap-2 text-sm sm:text-base">
                   <Terminal className="h-4 w-4 sm:h-5 sm:w-5 text-primary" />
                   CLI Install
+                  <Badge variant="outline" className="text-[10px] bg-amber-500/10 text-amber-500 border-amber-500/30">Coming Soon</Badge>
                 </CardTitle>
                 <p className="text-[10px] sm:text-xs text-muted-foreground">
-                  Recommended. Generates the theme system directly inside your project.
+                  CLI launching soon! Use the instant copy methods below instead.
                 </p>
               </CardHeader>
               <CardContent className="px-4 sm:px-6 pb-4 sm:pb-6 space-y-3 sm:space-y-4">
-                <div className="rounded-lg sm:rounded-xl border border-border/40 bg-background/50 p-2.5 sm:p-3 text-[10px] sm:text-xs text-muted-foreground">
-                  Use the published CLI for the best experience. This keeps your local project clean and works from
-                  anywhere.
+                <div className="rounded-lg sm:rounded-xl border border-primary/20 bg-primary/5 p-3 sm:p-4">
+                  <p className="text-[10px] sm:text-xs text-foreground font-medium mb-2">🚀 Easy 3-Second Setup:</p>
+                  <ol className="text-[10px] sm:text-xs text-muted-foreground space-y-1 list-decimal list-inside">
+                    <li>Go to <a href="/studio" className="text-primary hover:underline">/studio</a> and pick a theme</li>
+                    <li>Click "Get Theme" to copy CSS + React code</li>
+                    <li>Paste into your project - done!</li>
+                  </ol>
                 </div>
                 
                 <div className="relative group">
                   <pre className="overflow-x-auto rounded-lg sm:rounded-xl border border-border/40 bg-black/70 p-2.5 sm:p-3 text-[10px] sm:text-xs text-white/90">
-                    <code>npx gradient-forge@latest init --inject</code>
+                    <code>npm install gradient-forge (coming soon)</code>
                   </pre>
                   <Button
                     variant="ghost"
                     size="sm"
                     className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity h-6 sm:h-7"
-                    onClick={() => handleCopy("npx gradient-forge@latest init --inject", "CLI Install")}
+                    onClick={() => handleCopy("npm install gradient-forge", "NPM Install")}
                   >
-                    {copiedCommand === "CLI Install" ? (
+                    {copiedCommand === "NPM Install" ? (
                       <Check className="h-3 w-3 sm:h-3.5 sm:w-3.5 text-emerald-500" />
                     ) : (
                       <Copy className="h-3 w-3 sm:h-3.5 sm:w-3.5" />
@@ -190,7 +224,7 @@ export default function DocsPage() {
 
                 <StaggerContainer className="space-y-1.5 sm:space-y-2" stagger={0.05}>
                   {[
-                    "Run the CLI to scaffold theme assets",
+                    "CLI will scaffold theme files automatically",
                     "Import the generated CSS in your globals",
                     "Wrap your app with ThemeProvider",
                     "Set theme classes on root element",
@@ -210,32 +244,47 @@ export default function DocsPage() {
             </Card>
           </AnimatedSection>
 
-          {/* What CLI Adds */}
+          {/* Files to Copy */}
           <AnimatedSection animation="slideRight">
             <Card className="doc-card border-border/50 bg-background/60">
               <CardHeader className="px-4 sm:px-6 pt-4 sm:pt-6 pb-2 sm:pb-3">
                 <CardTitle className="flex items-center gap-2 text-sm sm:text-base">
                   <Package className="h-4 w-4 sm:h-5 sm:w-5 text-secondary" />
-                  What the CLI Adds
+                  Files to Copy
                 </CardTitle>
-                <p className="text-[10px] sm:text-xs text-muted-foreground">Files created inside your project root.</p>
+                <p className="text-[10px] sm:text-xs text-muted-foreground">Copy these files to add the theming system to your project.</p>
               </CardHeader>
               <CardContent className="px-4 sm:px-6 pb-4 sm:pb-6 space-y-1.5 sm:space-y-2">
                 {[
-                  "gradient-forge/theme-engine.ts",
-                  "gradient-forge/theme-context.tsx",
-                  "gradient-forge/themes.css",
+                  { file: "components/theme/theme-engine.ts", desc: "Core theme logic & definitions" },
+                  { file: "components/theme/theme-context.tsx", desc: "React context provider" },
+                  { file: "components/theme/token-export-utils.ts", desc: "Export utilities for tokens" },
+                  { file: "app/globals.css", desc: "CSS variables & theme classes (add to your existing)" },
                 ].map((item, index) => (
                   <div 
-                    key={item}
-                    className="rounded-lg sm:rounded-xl border border-border/40 bg-background/50 p-2 sm:p-3 text-[10px] sm:text-xs flex items-center gap-2 sm:gap-3 hover:border-secondary/30 transition-colors"
+                    key={item.file}
+                    className="rounded-lg sm:rounded-xl border border-border/40 bg-background/50 p-2 sm:p-3 text-[10px] sm:text-xs hover:border-secondary/30 transition-colors"
                   >
-                    <div className="h-6 w-6 sm:h-8 sm:w-8 rounded-md sm:rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
-                      <FileText className="h-3 w-3 sm:h-4 sm:w-4 text-primary" />
+                    <div className="flex items-center gap-2 sm:gap-3">
+                      <div className="h-6 w-6 sm:h-8 sm:w-8 rounded-md sm:rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
+                        <FileText className="h-3 w-3 sm:h-4 sm:w-4 text-primary" />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <code className="font-mono truncate block">{item.file}</code>
+                        <p className="text-[9px] sm:text-[10px] text-muted-foreground mt-0.5">{item.desc}</p>
+                      </div>
                     </div>
-                    <code className="font-mono truncate">{item}</code>
                   </div>
                 ))}
+                <div className="rounded-lg sm:rounded-xl border border-border/40 bg-background/50 p-2 sm:p-3 mt-2">
+                  <p className="text-[10px] sm:text-xs text-muted-foreground mb-2">Integration steps:</p>
+                  <ol className="text-[10px] sm:text-xs text-muted-foreground space-y-1 list-decimal list-inside">
+                    <li>Copy the 3 theme files to your components/theme/ folder</li>
+                    <li>Merge the CSS from globals.css into your app/globals.css</li>
+                    <li>Wrap your app with ThemeProvider</li>
+                    <li>Add theme classes to your HTML root element</li>
+                  </ol>
+                </div>
                 <MagneticButton strength={0.1}>
                   <Button variant="outline" size="sm" className="w-full mt-1 sm:mt-2 text-xs" asChild>
                     <a href="/studio">Preview Studio</a>
@@ -254,9 +303,10 @@ export default function DocsPage() {
                 <CardTitle className="flex items-center gap-2 text-sm sm:text-base">
                   <Settings className="h-4 w-4 sm:h-5 sm:w-5 text-accent" />
                   CLI Options
+                  <Badge variant="outline" className="text-[10px] bg-amber-500/10 text-amber-500 border-amber-500/30">Coming Soon</Badge>
                 </CardTitle>
                 <p className="text-[10px] sm:text-xs text-muted-foreground">
-                  Flags to control generation behavior.
+                  Flags to control generation behavior (via CLI).
                 </p>
               </CardHeader>
               <CardContent className="px-4 sm:px-6 pb-4 sm:pb-6">
@@ -281,9 +331,10 @@ export default function DocsPage() {
                 <CardTitle className="flex items-center gap-2 text-sm sm:text-base">
                   <Sparkles className="h-4 w-4 sm:h-5 sm:w-5 text-primary" />
                   Export Formats
+                  <Badge variant="outline" className="text-[10px] bg-amber-500/10 text-amber-500 border-amber-500/30">Web Only</Badge>
                 </CardTitle>
                 <p className="text-[10px] sm:text-xs text-muted-foreground">
-                  Multiple formats to fit any workflow.
+                  Use the Studio to export in these formats.
                 </p>
               </CardHeader>
               <CardContent className="px-4 sm:px-6 pb-4 sm:pb-6">

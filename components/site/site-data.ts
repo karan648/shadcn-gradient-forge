@@ -31,20 +31,16 @@ export const featureCards = [
 
 export const workflowSteps = [
   {
-    title: "1. Pick a palette",
-    description: "Preview all Nitro gradients and lock in the vibe for your app.",
+    title: "1. Pick a theme",
+    description: "Browse /studio or /gallery to find your perfect gradient.",
   },
   {
-    title: "2. Map tokens",
-    description: "Use the CSS variables and Tailwind aliases to wire in colors.",
+    title: "2. Copy the code",
+    description: "Click 'Get Theme' to copy CSS + React code instantly.",
   },
   {
-    title: "3. Apply surfaces",
-    description: "Drop in the surface tint layer for cards, sheets, and sidebars.",
-  },
-  {
-    title: "4. Ship the theme",
-    description: "Export snippets and ship a consistent theme across components.",
+    title: "3. Paste & go",
+    description: "Add CSS to globals, wrap with ThemeProvider, done!",
   },
 ];
 
@@ -57,16 +53,29 @@ export const useCases = [
 
 export const roadmapItems = [
   {
-    title: "CLI theme exporter",
-    detail: "Generate theme CSS, JSON, and Tailwind config from the terminal.",
+    title: "Theme Studio",
+    detail: "Interactive theme preview with live component showcase.",
+    status: "done",
   },
   {
-    title: "Preset editor",
+    title: "Theme Gallery",
+    detail: "Browse all 21 gradient themes with one-click copy.",
+    status: "done",
+  },
+  {
+    title: "Export Formats",
+    detail: "CSS, SCSS, JSON, Tailwind, W3C tokens, Figma tokens.",
+    status: "done",
+  },
+  {
+    title: "CLI Tool",
+    detail: "npm install gradient-forge for automatic setup.",
+    status: "coming-soon",
+  },
+  {
+    title: "Preset Editor",
     detail: "Fine-tune gradient stops and export a new palette.",
-  },
-  {
-    title: "Component playground",
-    detail: "Preview more shadcn components with real token mapping.",
+    status: "coming-soon",
   },
 ];
 

@@ -73,6 +73,7 @@
     --color-orange-500: #fe6e00;
     --color-amber-500: #f99c00;
     --color-yellow-400: #fac800;
+    --color-green-400: #05df72;
     --color-emerald-500: #00bb7f;
     --color-teal-500: #00baa7;
     --color-cyan-500: #00b7d7;
@@ -162,6 +163,7 @@
       --color-orange-500: lab(64.272% 57.1788 90.3583);
       --color-amber-500: lab(72.7183% 31.8672 97.9407);
       --color-yellow-400: lab(83.2664% 8.65132 106.895);
+      --color-green-400: lab(78.503% -64.9265 39.7492);
       --color-emerald-500: lab(66.9756% -58.27 19.5419);
       --color-teal-500: lab(67.3859% -49.0983 -2.63511);
       --color-cyan-500: lab(67.805% -35.3952 -30.2018);
@@ -423,6 +425,12 @@
 
   ::file-selector-button {
     border-color: var(--color-gray-200, currentcolor);
+  }
+
+  html {
+    text-rendering: optimizeLegibility;
+    scroll-behavior: smooth;
+    font-family: Instrument Sans, system-ui, sans-serif;
   }
 
   @keyframes float {
@@ -1364,6 +1372,10 @@
     height: 100vh;
   }
 
+  .max-h-\[200px\] {
+    max-height: 200px;
+  }
+
   .max-h-\[300px\] {
     max-height: 300px;
   }
@@ -1650,6 +1662,10 @@
 
   .list-inside {
     list-style-position: inside;
+  }
+
+  .list-decimal {
+    list-style-type: decimal;
   }
 
   .list-disc {
@@ -2080,6 +2096,16 @@
     }
   }
 
+  .bg-amber-500\/10 {
+    background-color: #f99c001a;
+  }
+
+  @supports (color: color-mix(in lab, red, red)) {
+    .bg-amber-500\/10 {
+      background-color: color-mix(in oklab, var(--color-amber-500) 10%, transparent);
+    }
+  }
+
   .bg-background {
     background-color: var(--color-background);
   }
@@ -2272,6 +2298,16 @@
     }
   }
 
+  .bg-emerald-500\/10 {
+    background-color: #00bb7f1a;
+  }
+
+  @supports (color: color-mix(in lab, red, red)) {
+    .bg-emerald-500\/10 {
+      background-color: color-mix(in oklab, var(--color-emerald-500) 10%, transparent);
+    }
+  }
+
   .bg-foreground\/80 {
     background-color: color-mix(in srgb, hsl(var(--foreground)) 80%, transparent);
   }
@@ -2284,6 +2320,16 @@
 
   .bg-muted {
     background-color: var(--color-muted);
+  }
+
+  .bg-muted\/20 {
+    background-color: color-mix(in srgb, hsl(var(--muted)) 20%, transparent);
+  }
+
+  @supports (color: color-mix(in lab, red, red)) {
+    .bg-muted\/20 {
+      background-color: color-mix(in oklab, var(--color-muted) 20%, transparent);
+    }
   }
 
   .bg-muted\/30 {
@@ -2991,8 +3037,16 @@
     font-size: 8px;
   }
 
+  .text-\[9px\] {
+    font-size: 9px;
+  }
+
   .text-\[10px\] {
     font-size: 10px;
+  }
+
+  .text-\[11px\] {
+    font-size: 11px;
   }
 
   .leading-relaxed {
@@ -3089,6 +3143,10 @@
     }
   }
 
+  .text-green-400 {
+    color: var(--color-green-400);
+  }
+
   .text-muted-foreground {
     color: var(--color-muted-foreground);
   }
@@ -3151,6 +3209,10 @@
 
   .uppercase {
     text-transform: uppercase;
+  }
+
+  .underline {
+    text-decoration-line: underline;
   }
 
   .opacity-0 {
@@ -3490,6 +3552,18 @@
   }
 
   @media (hover: hover) {
+    .hover\:bg-background\/80:hover {
+      background-color: color-mix(in srgb, hsl(var(--background)) 80%, transparent);
+    }
+
+    @supports (color: color-mix(in lab, red, red)) {
+      .hover\:bg-background\/80:hover {
+        background-color: color-mix(in oklab, var(--color-background) 80%, transparent);
+      }
+    }
+  }
+
+  @media (hover: hover) {
     .hover\:bg-muted:hover {
       background-color: var(--color-muted);
     }
@@ -3544,6 +3618,18 @@
   }
 
   @media (hover: hover) {
+    .hover\:bg-primary\/30:hover {
+      background-color: color-mix(in srgb, hsl(var(--primary)) 30%, transparent);
+    }
+
+    @supports (color: color-mix(in lab, red, red)) {
+      .hover\:bg-primary\/30:hover {
+        background-color: color-mix(in oklab, var(--color-primary) 30%, transparent);
+      }
+    }
+  }
+
+  @media (hover: hover) {
     .hover\:bg-secondary\/80:hover {
       background-color: color-mix(in srgb, hsl(var(--secondary)) 80%, transparent);
     }
@@ -3570,6 +3656,12 @@
   @media (hover: hover) {
     .hover\:text-white:hover {
       color: var(--color-white);
+    }
+  }
+
+  @media (hover: hover) {
+    .hover\:underline:hover {
+      text-decoration-line: underline;
     }
   }
 
@@ -4223,12 +4315,6 @@
   }
 
   @media (min-width: 40rem) {
-    .sm\:px-2 {
-      padding-inline: calc(var(--spacing) * 2);
-    }
-  }
-
-  @media (min-width: 40rem) {
     .sm\:px-3 {
       padding-inline: calc(var(--spacing) * 3);
     }
@@ -4395,6 +4481,12 @@
     .sm\:text-xs {
       font-size: var(--text-xs);
       line-height: var(--tw-leading, var(--text-xs--line-height));
+    }
+  }
+
+  @media (min-width: 40rem) {
+    .sm\:text-\[9px\] {
+      font-size: 9px;
     }
   }
 

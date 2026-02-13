@@ -27,12 +27,14 @@ const logError = (message) => process.stderr.write(`${message}\n`);
 const usage = () => {
   log("gradient-forge CLI");
   log("");
-  log("Usage:");
+  log("⚠️  Coming Soon - Not yet published to npm");
+  log("");
+  log("Usage (when published):");
   log("  gradient-forge init --path <project-root> [--inject|--no-inject] [--force] [--yes] [--tui]");
   log("  gradient-forge export --theme <theme-id> --format <format> [--output <path>]");
   log("  gradient-forge help");
   log("");
-  log("Commands:");
+  log("Commands (Coming Soon):");
   log("  init     Initialize gradient-forge in a project");
   log("  export   Export theme tokens in various formats");
   log("  help     Show this help message");
@@ -50,6 +52,8 @@ const usage = () => {
   log("  --format Export format: css, scss, json, tailwind, w3c-tokens, figma-tokens, css-variables, html-root, all");
   log("  --output Output directory (default: current directory)");
   log("  --mode   Color mode: dark, light (default: dark)");
+  log("");
+  log("📦 Meanwhile, copy files from the Studio or Gallery to get started!");
 };
 
 const ensureDir = (dir) => {
@@ -329,71 +333,30 @@ const promptYesNo = async (title, defaultYes = true) => {
 };
 
 const init = async () => {
-  const targetRoot = path.resolve(readArg("--path", process.cwd()));
-  const force = hasFlag("--force");
-  const yes = hasFlag("--yes");
-  const tui = hasFlag("--tui");
-  const explicitInject = hasFlag("--inject");
-  const noInject = hasFlag("--no-inject");
-
   log("");
-  log("Gradient Forge");
-  log("Crafting the theme engine for your shadcn project...");
+  log("⚠️  gradient-forge CLI - Coming Soon!");
   log("");
-
-  const select = tui ? promptSelect : promptSelectSimple;
-
-  const themeChoice = yes
-    ? themes.find((theme) => theme.id === DEFAULT_THEME) ?? themes[0]
-    : await select("Pick a default theme", themes, themes.findIndex((t) => t.id === DEFAULT_THEME));
-  const modeChoice = yes
-    ? DEFAULT_MODE
-    : await select("Pick a default color mode", ["dark", "light"], DEFAULT_MODE === "dark" ? 0 : 1);
-
-  let inject = explicitInject;
-  if (noInject) {
-    inject = false;
-  } else if (!explicitInject) {
-    inject = yes ? true : await promptYesNo("Inject theme CSS into app/globals.css?", true);
-  }
-
-  const themeDir = path.join(targetRoot, "gradient-forge");
-  ensureDir(themeDir);
-
-  const results = [];
-  results.push(copyTemplate("theme-engine.ts", path.join(themeDir, "theme-engine.ts"), force));
-  results.push(copyTemplate("theme-context.tsx", path.join(themeDir, "theme-context.tsx"), force));
-  results.push(copyTemplate("themes.css", path.join(themeDir, "themes.css"), force));
-
+  log("The CLI is not yet published to npm.");
+  log("For now, use one of these easy methods:");
   log("");
-  log("Created theme assets:");
-  results.forEach((item) => {
-    const status = item.skipped ? "skipped" : "written";
-    log(`- ${status}: ${path.relative(targetRoot, item.dest)}`);
-  });
-
-  if (inject) {
-    const globalsPath = path.join(targetRoot, "app", "globals.css");
-    const injected = appendThemeCss(globalsPath, force);
-    if (injected.appended) {
-      log(`- injected theme css into ${path.relative(targetRoot, globalsPath)}`);
-    } else if (injected.reason === "already") {
-      log("- theme css already injected, use --force to re-inject");
-    } else {
-      log("- app/globals.css not found, skipped injection");
-    }
-  }
-
+  log("🎨 Method 1: Copy from Studio");
+  log("   1. Visit /studio");
+  log("   2. Pick your theme");
+  log("   3. Click 'Get Theme' to copy CSS + code");
   log("");
-  log("Next steps:");
-  log("1. Import the CSS file in your global stylesheet:");
-  log('   @import "./gradient-forge/themes.css";');
-  log("2. Wrap your app with ThemeProvider from gradient-forge/theme-context.");
-  log("3. Add theme classes to your root element:");
-  log(`   class="${modeChoice} ${themeChoice.id}"`);
-  log(`   data-theme="${themeChoice.id}" data-color-mode="${modeChoice}"`);
+  log("📋 Method 2: Copy from Gallery");
+  log("   1. Visit /gallery");
+  log("   2. Browse themes");
+  log("   3. Click any theme to get the code");
   log("");
-  log("All set. Run your app and start styling.");
+  log("📦 Method 3: Manual Copy (Simplest)");
+  log("   Copy these files from this project:");
+  log("   - components/theme/theme-engine.ts");
+  log("   - components/theme/theme-context.tsx");
+  log("   - app/globals.css (theme parts)");
+  log("");
+  log("🚀 Launching on Product Hunt soon! Stay tuned!");
+  log("");
 };
 
 // Export format generators
@@ -569,62 +532,25 @@ const generateAllThemesCSS = () => {
 };
 
 const exportCommand = async () => {
-  const themeId = readArg("--theme", DEFAULT_THEME);
-  const format = readArg("--format", "css");
-  const outputDir = path.resolve(readArg("--output", process.cwd()));
-  const mode = readArg("--mode", "dark");
-
   log("");
-  log("Gradient Forge Export");
-  log("Exporting theme tokens...");
+  log("⚠️  gradient-forge export - Coming Soon!");
   log("");
-
-  // Validate theme
-  const theme = themes.find((t) => t.id === themeId);
-  if (!theme) {
-    logError(`Error: Unknown theme "${themeId}"`);
-    log("Available themes:");
-    themes.forEach((t) => log(`  - ${t.id} (${t.label})`));
-    process.exit(1);
-  }
-
-  // Validate format
-  const validFormats = Object.keys(exportGenerators);
-  if (format !== "all" && !validFormats.includes(format)) {
-    logError(`Error: Unknown format "${format}"`);
-    log(`Valid formats: ${validFormats.join(", ")}, all`);
-    process.exit(1);
-  }
-
-  ensureDir(outputDir);
-
-  if (format === "all") {
-    // Export all formats
-    log(`Exporting all formats for ${theme.label}...`);
-    for (const [fmt, generator] of Object.entries(exportGenerators)) {
-      const result = generator(themeId, mode);
-      const outputPath = path.join(outputDir, result.filename);
-      fs.writeFileSync(outputPath, result.content);
-      log(`  Created: ${result.filename}`);
-    }
-    
-    // Also export all themes CSS
-    const allThemesResult = generateAllThemesCSS();
-    const allThemesPath = path.join(outputDir, allThemesResult.filename);
-    fs.writeFileSync(allThemesPath, allThemesResult.content);
-    log(`  Created: ${allThemesResult.filename}`);
-  } else {
-    // Export single format
-    const generator = exportGenerators[format];
-    const result = generator(themeId, mode);
-    const outputPath = path.join(outputDir, result.filename);
-    fs.writeFileSync(outputPath, result.content);
-    log(`Created: ${result.filename}`);
-    log(`Location: ${outputPath}`);
-  }
-
+  log("The export CLI is not yet published to npm.");
+  log("Use the Studio or Gallery instead:");
   log("");
-  log("Export complete!");
+  log("🎨 /studio - Export themes in multiple formats");
+  log("📋 /gallery - Browse and copy themes");
+  log("");
+  log("Export formats available on web:");
+  log("  • CSS Theme");
+  log("  • SCSS");
+  log("  • JSON Tokens");
+  log("  • Tailwind Config");
+  log("  • W3C Tokens");
+  log("  • Figma Tokens");
+  log("");
+  log("🚀 Launching on Product Hunt soon! Stay tuned!");
+  log("");
 };
 
 switch (command) {

@@ -60,40 +60,53 @@ npm run dev
 - `components/theme/theme-panel.tsx` - UI for theme selection and mode toggle.
 - `components/theme/theme-exporter.tsx` - Copy-ready export blocks.
 
-## CLI
+## Installation
 
-Published CLI (recommended):
+### Option 1: CLI (Recommended)
 
 ```bash
 npx gradient-forge@latest init --inject
 ```
 
-Local repo CLI (works before publishing to npm):
-
-```bash
-node ./cli/index.mjs init --inject
-```
-
 CLI options:
+- `--inject` adds the theme CSS to `app/globals.css` automatically
+- `--no-inject` skips modifying `app/globals.css`
+- `--path` targets a custom project root
+- `--force` overwrites existing generated files
+- `--yes` skips prompts and applies defaults
+- `--tui` enables arrow-key selector mode
 
-- `--inject` adds the theme CSS to `app/globals.css` automatically.
-- `--no-inject` skips modifying `app/globals.css`.
-- `--path` targets a custom project root.
-- `--force` overwrites existing generated files.
-- `--yes` skips prompts and applies defaults.
-- `--tui` enables arrow-key selector mode.
+### Option 2: Manual Installation
 
-What it generates:
+Copy these files to your project:
 
-- `gradient-forge/theme-engine.ts`
-- `gradient-forge/theme-context.tsx`
-- `gradient-forge/themes.css`
+| File | Description |
+|------|-------------|
+| `components/theme/theme-engine.ts` | Core theme logic & 20+ theme definitions |
+| `components/theme/theme-context.tsx` | React context provider with persistence |
+| `components/theme/token-export-utils.ts` | Export utilities for all token formats |
+| `app/globals.css` | CSS variables & theme classes (merge with your existing) |
 
-Integration steps:
+**Integration Steps:**
 
-1. Import the CSS file in your global stylesheet.
-2. Wrap your app with `ThemeProvider`.
-3. Add theme classes to your root element.
+1. Copy the 3 theme files to your `components/theme/` folder
+2. Merge the CSS from `globals.css` into your `app/globals.css`
+3. Wrap your app with `ThemeProvider`:
+   ```tsx
+   import { ThemeProvider } from '@/components/theme/theme-context';
+   
+   export default function RootLayout({ children }) {
+     return (
+       <ThemeProvider>
+         {children}
+       </ThemeProvider>
+     );
+   }
+   ```
+4. Add theme classes to your HTML root element:
+   ```html
+   <html class="dark theme-nitro-midnight-blurple" data-theme="theme-nitro-midnight-blurple" data-color-mode="dark">
+   ```
 
 ## Add A New Theme
 

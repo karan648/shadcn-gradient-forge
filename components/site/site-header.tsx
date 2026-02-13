@@ -5,6 +5,7 @@ import gsap from "gsap";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { navItems } from "@/components/site/site-data";
+import { useThemeContext } from "@/components/theme/theme-context";
 import { 
   Wand2, 
   Command, 
@@ -12,7 +13,9 @@ import {
   Coffee,
   Menu, 
   X,
-  Sparkles
+  Sparkles,
+  Sun,
+  Moon,
 } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
@@ -20,9 +23,11 @@ import { MagneticButton } from "@/components/ui/gsap-animated";
 
 export function SiteHeader() {
   const pathname = usePathname();
+  const { colorMode, setColorMode } = useThemeContext();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const headerRef = useRef<HTMLElement>(null);
   const mobileMenuRef = useRef<HTMLDivElement>(null);
+  const isLightMode = colorMode === "light";
 
   useEffect(() => {
     const header = headerRef.current;
@@ -95,6 +100,29 @@ export function SiteHeader() {
             })}
             
             <div className="h-4 w-px bg-border mx-1" />
+
+            <div className="flex items-center rounded-full border border-border/60 bg-background/60 p-1">
+              <Button
+                variant={isLightMode ? "default" : "ghost"}
+                size="sm"
+                className="h-7 gap-1 px-2 text-xs"
+                onClick={() => setColorMode("light")}
+                aria-pressed={isLightMode}
+              >
+                <Sun className="h-3.5 w-3.5" />
+                <span>Light</span>
+              </Button>
+              <Button
+                variant={!isLightMode ? "default" : "ghost"}
+                size="sm"
+                className="h-7 gap-1 px-2 text-xs"
+                onClick={() => setColorMode("dark")}
+                aria-pressed={!isLightMode}
+              >
+                <Moon className="h-3.5 w-3.5" />
+                <span>Dark</span>
+              </Button>
+            </div>
             
             {/* Command Palette Trigger */}
             <MagneticButton strength={0.05}>
@@ -141,6 +169,26 @@ export function SiteHeader() {
 
           {/* Mobile Menu Button */}
           <div className="flex md:hidden items-center gap-1">
+            <div className="flex items-center rounded-full border border-border/60 bg-background/60 p-1">
+              <Button
+                variant={isLightMode ? "default" : "ghost"}
+                size="sm"
+                className="h-7 px-2 text-[11px]"
+                onClick={() => setColorMode("light")}
+                aria-pressed={isLightMode}
+              >
+                Light
+              </Button>
+              <Button
+                variant={!isLightMode ? "default" : "ghost"}
+                size="sm"
+                className="h-7 px-2 text-[11px]"
+                onClick={() => setColorMode("dark")}
+                aria-pressed={!isLightMode}
+              >
+                Dark
+              </Button>
+            </div>
             <MagneticButton strength={0.1}>
               <Button
                 variant="ghost"
