@@ -3,7 +3,7 @@
 </p>
 
 <p align="center">
-  <a href="https://buymeacoffee.com/your-username">
+  <a href="https://buymeacoffee.com/karannn">
     <img src="https://img.shields.io/badge/Buy%20Me%20a%20Coffee-Support-orange?style=for-the-badge&logo=buymeacoffee&logoColor=white" alt="Buy Me a Coffee" />
   </a>
 </p>
@@ -120,7 +120,7 @@ Open the Export section in the app to copy snippets for:
 
 If Gradient Forge helps your project, you can support development here:
 
-- `https://buymeacoffee.com/your-username`
+- `https://buymeacoffee.com/karannn`
 
 ## License
 

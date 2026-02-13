@@ -546,7 +546,9 @@ export default function HomePage() {
                 </div>
                 <div className="flex flex-wrap gap-2 sm:gap-3">
                   <MagneticButton strength={0.15}>
-                    <Button variant="glow" size="sm" className="sm:size-default text-xs sm:text-sm">Buy a coffee</Button>
+                    <Button variant="glow" size="sm" className="sm:size-default text-xs sm:text-sm" asChild>
+                      <a href="https://buymeacoffee.com/karannn" target="_blank" rel="noopener noreferrer">Buy a coffee</a>
+                    </Button>
                   </MagneticButton>
                   <MagneticButton strength={0.15}>
                     <Button variant="outline" size="sm" className="sm:size-default text-xs sm:text-sm">Sponsor</Button>

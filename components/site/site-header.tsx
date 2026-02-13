@@ -9,6 +9,7 @@ import {
   Wand2, 
   Command, 
   Github, 
+  Coffee,
   Menu, 
   X,
   Sparkles
@@ -123,6 +124,19 @@ export function SiteHeader() {
                 </a>
               </Button>
             </MagneticButton>
+            
+            <MagneticButton strength={0.05}>
+              <Button
+                variant="ghost"
+                size="sm"
+                className="px-2 h-8 sm:h-9"
+                asChild
+              >
+                <a href="https://buymeacoffee.com/karannn" target="_blank" rel="noopener noreferrer">
+                  <Coffee className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
+                </a>
+              </Button>
+            </MagneticButton>
           </nav>
 
           {/* Mobile Menu Button */}
@@ -191,6 +205,12 @@ export function SiteHeader() {
                 <a href="https://github.com" target="_blank" rel="noopener noreferrer">
                   <Github className="h-4 w-4 mr-2" />
                   GitHub
+                </a>
+              </Button>
+              <Button variant="ghost" size="sm" className="flex-1 h-9" asChild>
+                <a href="https://buymeacoffee.com/karannn" target="_blank" rel="noopener noreferrer">
+                  <Coffee className="h-4 w-4 mr-2" />
+                  Coffee
                 </a>
               </Button>
             </div>
