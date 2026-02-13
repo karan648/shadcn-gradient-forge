@@ -112,7 +112,7 @@ export function EcommerceTemplate({ preview }: EcommerceTemplateProps) {
 
         {/* Categories */}
         <div className="flex gap-2 overflow-x-auto pb-4 mb-4 sm:mb-6 scrollbar-hide">
-          {(preview ? categories.slice(0, 3) : categories).map((category, i) => (
+          {categories.map((category, i) => (
             <Button
               key={category}
               variant={i === 0 ? "default" : "outline"}
@@ -136,7 +136,7 @@ export function EcommerceTemplate({ preview }: EcommerceTemplateProps) {
 
         {/* Products Grid */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6">
-          {(preview ? products.slice(0, 2) : products).map((product) => (
+          {products.map((product) => (
             <Card key={product.id} className="border-border/50 group cursor-pointer overflow-hidden">
               <CardContent className="p-0">
                 {/* Image */}
@@ -187,14 +187,12 @@ export function EcommerceTemplate({ preview }: EcommerceTemplateProps) {
           ))}
         </div>
 
-        {/* Load More - hide in preview */}
-        {!preview && (
-          <div className="text-center mt-6 sm:mt-8">
-            <Button variant="outline" size="sm" className="text-xs">
-              Load More Products
-            </Button>
-          </div>
-        )}
+        {/* Load More */}
+        <div className="text-center mt-6 sm:mt-8">
+          <Button variant="outline" size="sm" className="text-xs">
+            Load More Products
+          </Button>
+        </div>
       </main>
     </div>
   );
