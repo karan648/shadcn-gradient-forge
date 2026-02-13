@@ -58,14 +58,10 @@ export function ComponentsTemplate({ preview }: ComponentsTemplateProps) {
         <Tabs defaultValue="buttons" className="space-y-6">
           <TabsList className="w-full justify-start overflow-x-auto">
             <TabsTrigger value="buttons" className="text-xs">Buttons</TabsTrigger>
-            {!preview && (
-              <>
-                <TabsTrigger value="badges" className="text-xs">Badges</TabsTrigger>
-                <TabsTrigger value="inputs" className="text-xs">Inputs</TabsTrigger>
-                <TabsTrigger value="cards" className="text-xs">Cards</TabsTrigger>
-                <TabsTrigger value="feedback" className="text-xs">Feedback</TabsTrigger>
-              </>
-            )}
+            <TabsTrigger value="badges" className="text-xs">Badges</TabsTrigger>
+            <TabsTrigger value="inputs" className="text-xs">Inputs</TabsTrigger>
+            <TabsTrigger value="cards" className="text-xs">Cards</TabsTrigger>
+            <TabsTrigger value="feedback" className="text-xs">Feedback</TabsTrigger>
           </TabsList>
 
           {/* Buttons Section */}
@@ -85,43 +81,39 @@ export function ComponentsTemplate({ preview }: ComponentsTemplateProps) {
               </Card>
             </div>
 
-            {!preview && (
-              <>
-                <div>
-                  <h2 className="text-lg font-semibold mb-4">Button Sizes</h2>
-                  <Card>
-                    <CardContent className="p-6">
-                      <div className="flex flex-wrap items-center gap-3">
-                        <Button size="sm" variant="glow">Small</Button>
-                        <Button size="md" variant="glow">Medium</Button>
-                        <Button size="lg" variant="glow">Large</Button>
-                      </div>
-                    </CardContent>
-                  </Card>
-                </div>
+            <div>
+              <h2 className="text-lg font-semibold mb-4">Button Sizes</h2>
+              <Card>
+                <CardContent className="p-6">
+                  <div className="flex flex-wrap items-center gap-3">
+                    <Button size="sm" variant="glow">Small</Button>
+                    <Button size="md" variant="glow">Medium</Button>
+                    <Button size="lg" variant="glow">Large</Button>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
 
-                <div>
-                  <h2 className="text-lg font-semibold mb-4">Button States</h2>
-                  <Card>
-                    <CardContent className="p-6">
-                      <div className="flex flex-wrap gap-3">
-                        <Button variant="glow" size="sm">
-                          <Check className="h-4 w-4 mr-2" />
-                          With Icon
-                        </Button>
-                        <Button variant="glow" size="sm" disabled>
-                          <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                          Loading
-                        </Button>
-                        <Button variant="outline" size="sm" disabled>
-                          Disabled
-                        </Button>
-                      </div>
-                    </CardContent>
-                  </Card>
-                </div>
-              </>
-            )}
+            <div>
+              <h2 className="text-lg font-semibold mb-4">Button States</h2>
+              <Card>
+                <CardContent className="p-6">
+                  <div className="flex flex-wrap gap-3">
+                    <Button variant="glow" size="sm">
+                      <Check className="h-4 w-4 mr-2" />
+                      With Icon
+                    </Button>
+                    <Button variant="glow" size="sm" disabled>
+                      <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                      Loading
+                    </Button>
+                    <Button variant="outline" size="sm" disabled>
+                      Disabled
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
           </TabsContent>
 
           {/* Badges Section */}

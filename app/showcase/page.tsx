@@ -177,14 +177,11 @@ export default function ShowcasePage() {
     showToast(`Applied ${NITRO_ALL_THEMES.find(t => t.id === newThemeId)?.label} theme`, "success");
   };
 
-  const getPreviewClasses = () => {
+  const getPreviewWidth = () => {
     switch (previewMode) {
-      case "mobile": 
-        return "w-[375px] max-w-full";
-      case "tablet": 
-        return "w-[768px] max-w-full";
-      default: 
-        return "w-full";
+      case "mobile": return "375px";
+      case "tablet": return "768px";
+      default: return "100%";
     }
   };
 
@@ -343,23 +340,17 @@ export default function ShowcasePage() {
           {/* Preview/Code Area */}
           <div className="flex-1 overflow-hidden bg-muted/30 relative">
             {activeTab === "preview" ? (
-              <div className="h-full overflow-auto p-4 sm:p-8 flex justify-center">
+              <div className="h-full overflow-auto p-8 flex justify-center">
                 <div 
                   ref={previewRef}
-                  className={cn(
-                    "bg-background rounded-xl shadow-2xl overflow-hidden transition-all duration-300 mx-auto relative",
-                    getPreviewClasses()
-                  )}
+                  className="bg-background rounded-xl shadow-2xl overflow-hidden transition-all duration-300"
                   style={{ 
-                    height: "800px",
-                    maxHeight: "calc(100vh - 200px)"
+                    width: getPreviewWidth(),
+                    minHeight: "600px",
+                    maxWidth: "100%"
                   }}
                 >
-                  <div className="h-full overflow-hidden">
-                    <TemplateComponent preview={true} />
-                  </div>
-                  {/* Gradient overlay to indicate there's more content */}
-                  <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-background to-transparent pointer-events-none" />
+                  <TemplateComponent preview={true} />
                 </div>
               </div>
             ) : (

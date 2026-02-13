@@ -155,7 +155,7 @@ export function BlogTemplate({ preview }: BlogTemplateProps) {
         <div>
           <h3 className="text-xl font-semibold mb-6">Recent Articles</h3>
           <div className="grid sm:grid-cols-2 gap-4 sm:gap-6">
-            {(preview ? posts.slice(0, 2) : posts).map((post) => (
+            {posts.map((post) => (
               <Card key={post.id} className="border-border/50 cursor-pointer hover:shadow-lg transition-shadow group">
                 <CardContent className="p-4 sm:p-5">
                   <div className={cn("h-32 sm:h-40 rounded-lg mb-4", post.image)} />
@@ -180,20 +180,18 @@ export function BlogTemplate({ preview }: BlogTemplateProps) {
           </div>
         </div>
 
-        {/* Pagination - hide in preview */}
-        {!preview && (
-          <div className="flex items-center justify-center gap-2 mt-8 sm:mt-12">
-            <Button variant="outline" size="sm" className="h-8 w-8 p-0">
-              <ChevronLeft className="h-4 w-4" />
-            </Button>
-            <Button variant="default" size="sm" className="h-8 w-8 p-0 text-xs">1</Button>
-            <Button variant="outline" size="sm" className="h-8 w-8 p-0 text-xs">2</Button>
-            <Button variant="outline" size="sm" className="h-8 w-8 p-0 text-xs">3</Button>
-            <Button variant="outline" size="sm" className="h-8 w-8 p-0">
-              <ChevronRight className="h-4 w-4" />
-            </Button>
-          </div>
-        )}
+        {/* Pagination */}
+        <div className="flex items-center justify-center gap-2 mt-8 sm:mt-12">
+          <Button variant="outline" size="sm" className="h-8 w-8 p-0">
+            <ChevronLeft className="h-4 w-4" />
+          </Button>
+          <Button variant="default" size="sm" className="h-8 w-8 p-0 text-xs">1</Button>
+          <Button variant="outline" size="sm" className="h-8 w-8 p-0 text-xs">2</Button>
+          <Button variant="outline" size="sm" className="h-8 w-8 p-0 text-xs">3</Button>
+          <Button variant="outline" size="sm" className="h-8 w-8 p-0">
+            <ChevronRight className="h-4 w-4" />
+          </Button>
+        </div>
       </main>
     </div>
   );
