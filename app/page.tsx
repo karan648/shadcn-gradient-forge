@@ -451,35 +451,35 @@ export default function HomePage() {
                 <div className="flex flex-wrap items-center gap-2">
                   <CardTitle className="flex items-center gap-2 text-sm sm:text-base">
                     <Terminal className="h-4 w-4 sm:h-5 sm:w-5 text-primary" />
-                    CLI Export
+                    CLI Install
                   </CardTitle>
-                  <Badge variant="outline" className="text-[10px] sm:text-xs bg-amber-500/10 text-amber-500 border-amber-500/30">Coming Soon</Badge>
+                  <Badge variant="outline" className="text-[10px] sm:text-xs bg-emerald-500/10 text-emerald-500 border-emerald-500/30">Now Available</Badge>
                 </div>
                 <p className="text-xs sm:text-sm text-muted-foreground">
-                  CLI launching soon! Use the Studio to export themes in 8+ formats now.
+                  One command setup with interactive theme selector. Auto-detects your project type!
                 </p>
               </CardHeader>
               <CardContent className="px-3 sm:px-4 pb-3 sm:pb-4 space-y-2 sm:space-y-3">
+                <div className="rounded-xl sm:rounded-2xl border border-border/40 bg-black/70 p-3 sm:p-4">
+                  <code className="text-xs sm:text-sm font-mono text-white/90 block">npx gradient-forge init</code>
+                </div>
                 {[
-                  { cmd: "init", desc: "Scaffolds theme files and context", comingSoon: true },
-                  { cmd: "export", desc: "Generates CSS, JSON, Tailwind, W3C tokens", comingSoon: true },
-                  { cmd: "--inject", desc: "Adds theme CSS automatically", comingSoon: true },
+                  { cmd: "✨", desc: "Auto-detects Next.js, Vite, or React projects" },
+                  { cmd: "🎨", desc: "Interactive theme selector with 21 gradients" },
+                  { cmd: "⚡", desc: "Instantly wraps your app with ThemeProvider" },
+                  { cmd: "🔧", desc: "Sets up CSS variables and theme classes" },
                 ].map((item) => (
                   <div 
-                    key={item.cmd}
-                    className="rounded-xl sm:rounded-2xl border border-border/40 bg-background/50 p-2 sm:p-3 hover:border-primary/30 transition-colors opacity-70"
+                    key={item.desc}
+                    className="rounded-xl sm:rounded-2xl border border-border/40 bg-background/50 p-2 sm:p-3 hover:border-primary/30 transition-colors"
                   >
-                    <code className="text-xs sm:text-sm font-semibold text-foreground">{item.cmd}</code>
-                    <span className="text-[10px] sm:text-xs text-muted-foreground ml-2">{item.desc}</span>
-                    <Badge variant="outline" className="ml-2 text-[8px] sm:text-[9px] bg-amber-500/10 text-amber-500 border-amber-500/30">Coming Soon</Badge>
+                    <span className="text-xs sm:text-sm mr-2">{item.cmd}</span>
+                    <span className="text-[10px] sm:text-xs text-muted-foreground">{item.desc}</span>
                   </div>
                 ))}
-                <pre className="overflow-x-auto rounded-xl sm:rounded-2xl border border-border/40 bg-black/70 p-2 sm:p-3 text-[10px] sm:text-xs text-white/90 opacity-50">
-                  <code>npx gradient-forge export --theme theme-nitro-midnight-blurple --format all</code>
-                </pre>
                 <div className="rounded-lg sm:rounded-xl border border-primary/20 bg-primary/5 p-2 sm:p-3">
                   <p className="text-[10px] sm:text-xs text-foreground">
-                    🎉 Use <a href="/studio" className="text-primary underline">/studio</a> now to export themes!
+                    🚀 Run the command in your project root and follow the prompts!
                   </p>
                 </div>
               </CardContent>
@@ -492,7 +492,7 @@ export default function HomePage() {
                   Export Formats
                 </CardTitle>
                 <p className="text-xs sm:text-sm text-muted-foreground">
-                  Multiple formats to fit any workflow or design tool.
+                  Use the Studio to export themes in multiple formats.
                 </p>
               </CardHeader>
               <CardContent className="px-3 sm:px-4 pb-3 sm:pb-4">
@@ -507,6 +507,11 @@ export default function HomePage() {
                     </div>
                   ))}
                 </StaggerContainer>
+                <MagneticButton strength={0.1} className="mt-3">
+                  <Button variant="outline" size="sm" className="w-full text-xs" asChild>
+                    <a href="/docs">View Full Documentation</a>
+                  </Button>
+                </MagneticButton>
               </CardContent>
             </Card>
           </div>

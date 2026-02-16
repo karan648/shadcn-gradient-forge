@@ -31,16 +31,16 @@ export const featureCards = [
 
 export const workflowSteps = [
   {
-    title: "1. Pick a theme",
-    description: "Browse /studio or /gallery to find your perfect gradient.",
+    title: "1. Run the CLI",
+    description: "npx gradient-forge init in your project root.",
   },
   {
-    title: "2. Copy the code",
-    description: "Click 'Get Theme' to copy CSS + React code instantly.",
+    title: "2. Pick a theme",
+    description: "Use the interactive selector to choose from 21 gradients.",
   },
   {
-    title: "3. Paste & go",
-    description: "Add CSS to globals, wrap with ThemeProvider, done!",
+    title: "3. Done!",
+    description: "ThemeProvider auto-wraps your app. Start the dev server!",
   },
 ];
 
@@ -69,8 +69,8 @@ export const roadmapItems = [
   },
   {
     title: "CLI Tool",
-    detail: "npm install gradient-forge for automatic setup.",
-    status: "coming-soon",
+    detail: "npx gradient-forge init for automatic setup with interactive theme picker.",
+    status: "done",
   },
   {
     title: "Preset Editor",
