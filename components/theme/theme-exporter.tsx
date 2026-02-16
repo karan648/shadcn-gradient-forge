@@ -6,6 +6,8 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Switch } from "@/components/ui/switch";
+import { useThemeContext } from "./theme-context";
 import { cn } from "@/lib/utils";
 import { 
   Check, 
@@ -18,7 +20,9 @@ import {
   FileJson,
   Layers,
   FileType,
-  AlertCircle
+  AlertCircle,
+  Sun,
+  Moon
 } from "lucide-react";
 import { type ThemeId, NITRO_ALL_THEMES } from "./theme-engine";
 import { 
@@ -38,26 +42,39 @@ interface ThemeExporterProps {
   colorMode?: "dark" | "light";
 }
 
-export function ThemeExporter({ themeId = "theme-nitro-midnight-blurple", colorMode = "dark" }: ThemeExporterProps) {
+export function ThemeExporter({ 
+  themeId: externalThemeId, 
+  colorMode: externalColorMode 
+}: ThemeExporterProps) {
+  const { themeId: contextThemeId, colorMode: contextColorMode, setThemeId, setColorMode } = useThemeContext();
+  
+  const themeId = externalThemeId ?? contextThemeId;
+  const colorMode = externalColorMode ?? contextColorMode;
+  
+  const [selectedThemeId, setSelectedThemeId] = useState<ThemeId>(themeId);
+  const [selectedColorMode, setSelectedColorMode] = useState<"dark" | "light">(colorMode);
   const [selectedFormat, setSelectedFormat] = useState<ExportFormat>("css");
   const [copyState, setCopyState] = useState<Record<string, CopyStatus>>({});
   const [activeTab, setActiveTab] = useState<string>("single");
 
+  const currentThemeId = externalThemeId ? themeId : selectedThemeId;
+  const currentColorMode = externalColorMode ? colorMode : selectedColorMode;
+
   const exportResult = useMemo(() => {
     return exportTokens({ 
       format: selectedFormat, 
-      themeId, 
-      colorMode 
+      themeId: currentThemeId, 
+      colorMode: currentColorMode 
     });
-  }, [selectedFormat, themeId, colorMode]);
+  }, [selectedFormat, currentThemeId, currentColorMode]);
 
   const allThemesExport = useMemo(() => {
     return generateAllThemesCSS();
   }, []);
 
   const tokens = useMemo(() => {
-    return getThemeTokens(themeId);
-  }, [themeId]);
+    return getThemeTokens(currentThemeId);
+  }, [currentThemeId]);
 
   const handleCopy = async (id: string, content: string) => {
     setCopyState((prev) => ({ ...prev, [id]: "copying" }));
@@ -102,6 +119,22 @@ export function ThemeExporter({ themeId = "theme-nitro-midnight-blurple", colorM
   const currentStatus = copyState["export"] ?? "idle";
   const allThemesStatus = copyState["all-themes"] ?? "idle";
 
+  const handleThemeChange = (newThemeId: string) => {
+    const id = newThemeId as ThemeId;
+    setSelectedThemeId(id);
+    if (setThemeId && !externalThemeId) {
+      setThemeId(id);
+    }
+  };
+
+  const handleColorModeToggle = (checked: boolean) => {
+    const mode = checked ? "dark" : "light";
+    setSelectedColorMode(mode);
+    if (setColorMode && !externalColorMode) {
+      setColorMode(mode);
+    }
+  };
+
   return (
     <Card className="border-border/50 bg-background/60">
       <CardHeader className="flex flex-col gap-2">
@@ -109,12 +142,45 @@ export function ThemeExporter({ themeId = "theme-nitro-midnight-blurple", colorM
           <div>
             <CardTitle>Theme Export</CardTitle>
             <p className="text-sm text-muted-foreground mt-1">
-              Export {themeId.replace("theme-nitro-", "").replace(/-/g, " ")} theme in multiple formats
+              Export {currentThemeId.replace("theme-nitro-", "").replace(/-/g, " ")} theme in multiple formats
             </p>
           </div>
           <Badge variant="glass" className="gap-1">
             <Braces className="h-3 w-3" /> Multi-Format
           </Badge>
+        </div>
+        
+        {/* Theme Selection & Color Mode Toggle */}
+        <div className="flex flex-wrap items-center gap-3 mt-2">
+          <div className="flex-1 min-w-[200px]">
+            <Select value={currentThemeId} onValueChange={handleThemeChange}>
+              <SelectTrigger className="w-full">
+                <SelectValue placeholder="Select a theme" />
+              </SelectTrigger>
+              <SelectContent>
+                {NITRO_ALL_THEMES.map((theme) => (
+                  <SelectItem key={theme.id} value={theme.id}>
+                    <div className="flex items-center gap-2">
+                      <div 
+                        className="w-4 h-4 rounded-md border border-border/30" 
+                        style={{ background: theme.preview }}
+                      />
+                      <span>{theme.label}</span>
+                    </div>
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+          
+          <div className="flex items-center gap-2 bg-muted/50 rounded-lg px-3 py-1.5">
+            <Sun className={cn("h-4 w-4", currentColorMode === "light" ? "text-foreground" : "text-muted-foreground")} />
+            <Switch
+              checked={currentColorMode === "dark"}
+              onCheckedChange={handleColorModeToggle}
+            />
+            <Moon className={cn("h-4 w-4", currentColorMode === "dark" ? "text-foreground" : "text-muted-foreground")} />
+          </div>
         </div>
       </CardHeader>
       <CardContent className="grid gap-4">

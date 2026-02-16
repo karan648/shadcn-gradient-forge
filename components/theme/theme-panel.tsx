@@ -1,13 +1,16 @@
 "use client";
 
 import { useThemeContext } from "@/components/theme/theme-context";
-import { MEMORY_LANE_THEME, NITRO_PUBLIC_THEMES } from "@/components/theme/theme-engine";
+import { MEMORY_LANE_THEME, NITRO_PUBLIC_THEMES, NITRO_ALL_THEMES, type ThemeId } from "@/components/theme/theme-engine";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Switch } from "@/components/ui/switch";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { cn } from "@/lib/utils";
-import { Lock, Moon, Sun } from "lucide-react";
+import { Lock, Moon, Sun, Download, Copy, Check, FileCode, Palette } from "lucide-react";
+import { useState } from "react";
+import { exportTokens, downloadFile, copyToClipboard, exportFormats, generateAllThemesCSS, type ExportFormat } from "./token-export-utils";
 
 export function ThemePanel() {
   const {
@@ -25,6 +28,32 @@ export function ThemePanel() {
   const seenThemes = totalThemes - remainingForUnlock;
   const progress = Math.round((seenThemes / totalThemes) * 100);
 
+  const [selectedExportFormat, setSelectedExportFormat] = useState<ExportFormat>("css");
+  const [copyStatus, setCopyStatus] = useState<"idle" | "copying" | "copied" | "error">("idle");
+
+  const handleCopy = async (content: string) => {
+    setCopyStatus("copying");
+    const success = await copyToClipboard(content);
+    setCopyStatus(success ? "copied" : "error");
+    setTimeout(() => setCopyStatus("idle"), 1500);
+  };
+
+  const handleDownload = () => {
+    const result = exportTokens({ 
+      format: selectedExportFormat, 
+      themeId, 
+      colorMode 
+    });
+    downloadFile(result);
+  };
+
+  const handleDownloadAll = () => {
+    const result = generateAllThemesCSS();
+    downloadFile(result);
+  };
+
+  const currentTheme = NITRO_ALL_THEMES.find(t => t.id === themeId);
+
   return (
     <Card className="border-border/50 bg-background/60">
       <CardHeader>
@@ -39,6 +68,38 @@ export function ThemePanel() {
         </div>
       </CardHeader>
       <CardContent className="space-y-6">
+        {/* Theme Selection */}
+        <div className="flex flex-col gap-3 rounded-2xl border border-border/40 bg-background/50 px-4 py-3 sm:flex-row sm:items-center sm:justify-between">
+          <div className="space-y-1 flex-1">
+            <p className="text-sm font-semibold flex items-center gap-2">
+              <Palette className="h-4 w-4" />
+              Select Theme
+            </p>
+            <p className="text-xs text-muted-foreground">
+              Choose a theme to export.
+            </p>
+          </div>
+          <Select value={themeId} onValueChange={(v: string) => setThemeId(v as ThemeId)}>
+            <SelectTrigger className="w-full sm:w-[220px]">
+              <SelectValue placeholder="Select theme" />
+            </SelectTrigger>
+            <SelectContent>
+              {NITRO_ALL_THEMES.map((theme) => (
+                <SelectItem key={theme.id} value={theme.id}>
+                  <div className="flex items-center gap-2">
+                    <div 
+                      className="w-4 h-4 rounded-md border border-border/30" 
+                      style={{ background: theme.preview }}
+                    />
+                    <span>{theme.label}</span>
+                  </div>
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+
+        {/* Color Mode Toggle */}
         <div className="flex flex-col gap-3 rounded-2xl border border-border/40 bg-background/50 px-4 py-3 sm:flex-row sm:items-center sm:justify-between">
           <div className="space-y-1">
             <p className="text-sm font-semibold">Color Mode</p>
@@ -54,6 +115,68 @@ export function ThemePanel() {
               label="Toggle dark mode"
             />
             <Moon className={cn("h-4 w-4", !isLight ? "text-foreground" : "text-muted-foreground")} />
+          </div>
+        </div>
+
+        {/* Export Section */}
+        <div className="flex flex-col gap-3 rounded-2xl border border-border/40 bg-background/50 px-4 py-3">
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <div>
+              <p className="text-sm font-semibold flex items-center gap-2">
+                <Download className="h-4 w-4" />
+                Export Theme
+              </p>
+              <p className="text-xs text-muted-foreground">
+                Download theme files for your project.
+              </p>
+            </div>
+          </div>
+          
+          <div className="flex flex-wrap gap-2">
+            <Select value={selectedExportFormat} onValueChange={(v: string) => setSelectedExportFormat(v as ExportFormat)}>
+              <SelectTrigger className="w-[140px] h-8">
+                <SelectValue placeholder="Format" />
+              </SelectTrigger>
+              <SelectContent>
+                {exportFormats.map((format) => (
+                  <SelectItem key={format.value} value={format.value}>
+                    {format.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            
+            <Button 
+              variant="outline" 
+              size="sm" 
+              className="h-8 gap-1.5"
+              onClick={() => handleCopy(exportTokens({ format: selectedExportFormat, themeId, colorMode }).content)}
+              disabled={copyStatus === "copying"}
+            >
+              {copyStatus === "copied" ? <Check className="h-3.5 w-3.5" /> : <Copy className="h-3.5 w-3.5" />}
+              {copyStatus === "copying" ? "Copying..." : copyStatus === "copied" ? "Copied!" : "Copy"}
+            </Button>
+            
+            <Button 
+              size="sm" 
+              className="h-8 gap-1.5"
+              onClick={handleDownload}
+            >
+              <Download className="h-3.5 w-3.5" />
+              Download
+            </Button>
+          </div>
+          
+          <div className="pt-2 border-t border-border/30">
+            <Button 
+              variant="secondary" 
+              size="sm" 
+              className="w-full h-8 gap-1.5"
+              onClick={handleDownloadAll}
+            >
+              <FileCode className="h-3.5 w-3.5" />
+              Download All Themes ({NITRO_ALL_THEMES.length} themes)
+            </Button>
           </div>
         </div>
 

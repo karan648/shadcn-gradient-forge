@@ -7,9 +7,11 @@ import { SiteHeader } from "@/components/site/site-header";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { MEMORY_LANE_THEME, NITRO_PUBLIC_THEMES, type ThemeId } from "@/components/theme/theme-engine";
+import { MEMORY_LANE_THEME, NITRO_PUBLIC_THEMES, NITRO_ALL_THEMES, type ThemeId } from "@/components/theme/theme-engine";
 import { useThemeContext } from "@/components/theme/theme-context";
 import { useToast } from "@/components/ui/toast";
+import { Switch } from "@/components/ui/switch";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { 
   Image, 
   Grid, 
@@ -18,9 +20,16 @@ import {
   Check, 
   Eye,
   Search,
-  Filter
+  Filter,
+  Download,
+  Copy,
+  Sun,
+  Moon,
+  Palette
 } from "lucide-react";
 import { MagneticButton } from "@/components/ui/gsap-animated";
+import { exportTokens, downloadFile, copyToClipboard, exportFormats, generateAllThemesCSS, type ExportFormat } from "@/components/theme/token-export-utils";
+import { cn } from "@/lib/utils";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
@@ -29,12 +38,39 @@ if (typeof window !== "undefined") {
 const galleryThemes = [...NITRO_PUBLIC_THEMES, MEMORY_LANE_THEME];
 
 export default function GalleryPage() {
-  const { themeId, setThemeId, memoryLaneUnlocked } = useThemeContext();
+  const { themeId, setThemeId, colorMode, setColorMode, memoryLaneUnlocked } = useThemeContext();
   const { showToast } = useToast();
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
   const [searchQuery, setSearchQuery] = useState("");
   const [filter, setFilter] = useState<"all" | "public" | "secret">("all");
+  const [selectedExportFormat, setSelectedExportFormat] = useState<ExportFormat>("css");
+  const [copyStatus, setCopyStatus] = useState<"idle" | "copying" | "copied" | "error">("idle");
   const gridRef = useRef<HTMLDivElement>(null);
+
+  const isLight = colorMode === "light";
+
+  const handleCopy = async (content: string) => {
+    setCopyStatus("copying");
+    const success = await copyToClipboard(content);
+    setCopyStatus(success ? "copied" : "error");
+    setTimeout(() => setCopyStatus("idle"), 1500);
+  };
+
+  const handleDownload = () => {
+    const result = exportTokens({ 
+      format: selectedExportFormat, 
+      themeId, 
+      colorMode 
+    });
+    downloadFile(result);
+    showToast(`Downloaded ${result.filename}`, "success");
+  };
+
+  const handleDownloadAll = () => {
+    const result = generateAllThemesCSS();
+    downloadFile(result);
+    showToast(`Downloaded ${result.filename}`, "success");
+  };
 
   useEffect(() => {
     const grid = gridRef.current;
@@ -181,6 +217,73 @@ export default function GalleryPage() {
           <p className="text-[10px] sm:text-xs text-muted-foreground">
             Showing {filteredThemes.length} of {galleryThemes.length}
           </p>
+        </div>
+
+        {/* Export Controls */}
+        <div className="flex flex-wrap items-center gap-3 p-3 sm:p-4 rounded-xl sm:rounded-2xl border border-border/50 bg-background/60">
+          <div className="flex items-center gap-2">
+            <Palette className="h-4 w-4 text-primary" />
+            <span className="text-sm font-medium">Export Theme</span>
+          </div>
+          
+          <div className="h-4 w-px bg-border" />
+          
+          <Select value={selectedExportFormat} onValueChange={(v: string) => setSelectedExportFormat(v as ExportFormat)}>
+            <SelectTrigger className="w-[130px] h-8">
+              <SelectValue placeholder="Format" />
+            </SelectTrigger>
+            <SelectContent>
+              {exportFormats.map((format) => (
+                <SelectItem key={format.value} value={format.value}>
+                  {format.label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+          
+          <Button 
+            variant="outline" 
+            size="sm" 
+            className="h-8 gap-1.5"
+            onClick={() => handleCopy(exportTokens({ format: selectedExportFormat, themeId, colorMode }).content)}
+            disabled={copyStatus === "copying"}
+          >
+            <Copy className="h-3.5 w-3.5" />
+            {copyStatus === "copying" ? "Copying..." : copyStatus === "copied" ? "Copied!" : "Copy"}
+          </Button>
+          
+          <Button 
+            size="sm" 
+            className="h-8 gap-1.5"
+            onClick={handleDownload}
+          >
+            <Download className="h-3.5 w-3.5" />
+            Download
+          </Button>
+          
+          <div className="h-4 w-px bg-border" />
+          
+          <div className="flex items-center gap-2 bg-muted/50 rounded-lg px-2 py-1">
+            <Sun className={cn("h-4 w-4", isLight ? "text-foreground" : "text-muted-foreground")} />
+            <Switch
+              checked={!isLight}
+              onCheckedChange={(checked) => setColorMode(checked ? "dark" : "light")}
+              label="Toggle dark mode"
+            />
+            <Moon className={cn("h-4 w-4", !isLight ? "text-foreground" : "text-muted-foreground")} />
+          </div>
+          
+          <div className="flex-1" />
+          
+          <Button 
+            variant="secondary" 
+            size="sm" 
+            className="h-8 gap-1.5"
+            onClick={handleDownloadAll}
+          >
+            <Download className="h-3.5 w-3.5" />
+            Download All ({NITRO_ALL_THEMES.length})
+          </Button>
         </div>
 
         {/* Theme Grid/List */}
